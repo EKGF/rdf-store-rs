@@ -1,7 +1,7 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 use super::DataType;
-use crate::{Error, Error::Unknown};
+use crate::{RDFStoreError, RDFStoreError::Unknown};
 
 #[derive(Debug)]
 pub struct ResourceValue {
@@ -17,7 +17,7 @@ impl ResourceValue {
         namespace_len: usize,
         data: *const u8,
         data_len: usize,
-    ) -> Result<Self, Error> {
+    ) -> Result<Self, RDFStoreError> {
         let ns = if namespace_len == 0 {
             None
         } else {

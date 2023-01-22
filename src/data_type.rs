@@ -1,7 +1,7 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 use {
-    crate::{Error, Error::UnknownDataType},
+    crate::{RDFStoreError, RDFStoreError::UnknownDataType},
     num_enum::TryFromPrimitive,
     phf::phf_map,
     serde::Serialize,
@@ -87,15 +87,15 @@ impl Default for DataType {
 }
 
 impl DataType {
-    pub fn from_datatype_id(data_type_id: u8) -> Result<DataType, Error> {
+    pub fn from_datatype_id(data_type_id: u8) -> Result<DataType, RDFStoreError> {
         DataType::try_from(data_type_id).map_err(|_err| UnknownDataType { data_type_id })
     }
 
-    pub fn from_xsd_iri(iri: &str) -> Result<Self, Error> {
+    pub fn from_xsd_iri(iri: &str) -> Result<Self, RDFStoreError> {
         if let Some(data_type) = XSD_DATA_TYPE_MAP.get(iri) {
             Ok(data_type.clone())
         } else {
-            Err(Error::UnknownXsdDataType { data_type_iri: iri.to_string() })
+            Err(RDFStoreError::UnknownXsdDataType { data_type_iri: iri.to_string() })
         }
     }
 

@@ -7,7 +7,7 @@ use {thiserror::Error};
 use crate::DataType;
 
 #[derive(Error, Debug)]
-pub enum Error {
+pub enum RDFStoreError {
     #[allow(dead_code)]
     #[error("Unknown Error")]
     Unknown,
@@ -49,7 +49,7 @@ pub enum Error {
     #[error(transparent)]
     IOError(#[from] std::io::Error),
     /// Represents all other cases of `ignore::Error`
-    /// (see https://docs.rs/ignore/latest/ignore/enum.Error.html)
+    /// (see <https://docs.rs/ignore/latest/ignore/enum.Error.html>)
     #[error(transparent)]
     WalkError(#[from] ignore::Error),
     #[error(transparent)]
@@ -65,8 +65,8 @@ pub enum Error {
 }
 
 #[cfg(feature = "nom_support")]
-impl<I: From<&'static str>> From<Error> for nom::Err<nom::error::Error<I>> {
-    fn from(_: Error) -> Self {
+impl<I: From<&'static str>> From<RDFStoreError> for nom::Err<nom::error::Error<I>> {
+    fn from(_: RDFStoreError) -> Self {
         nom::Err::Error(nom::error::Error::new(
             "unknown rdfox error".into(),
             nom::error::ErrorKind::Fail,

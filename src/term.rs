@@ -1,14 +1,14 @@
-use std::str::FromStr;
-
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
+use std::str::FromStr;
+
 use iref::Iri;
 
 use super::LexicalValue;
-use crate::{DataType, Error};
+use crate::{DataType, RDFStoreError};
 
 /// An RDF Term is either an IRI, a literal or a blank node.
-/// See https://www.w3.org/TR/rdf11-concepts/#section-triples
+/// See <https://www.w3.org/TR/rdf11-concepts/#section-triples>
 #[derive(Debug)]
 pub enum Term {
     Iri(LexicalValue),
@@ -17,17 +17,17 @@ pub enum Term {
 }
 
 impl Term {
-    pub fn new_iri(iri: &Iri) -> Result<Self, Error> { Ok(Term::Iri(LexicalValue::from_iri(iri)?)) }
+    pub fn new_iri(iri: &Iri) -> Result<Self, RDFStoreError> { Ok(Term::Iri(LexicalValue::from_iri(iri)?)) }
 
-    pub fn new_iri_from_str(iri_str: &str) -> Result<Self, Error> {
+    pub fn new_iri_from_str(iri_str: &str) -> Result<Self, RDFStoreError> {
         Term::new_iri(&Iri::new(iri_str)?)
     }
 
-    pub fn new_str(str: &str) -> Result<Self, Error> {
+    pub fn new_str(str: &str) -> Result<Self, RDFStoreError> {
         Ok(Term::Literal(LexicalValue::from_str(str)?))
     }
 
-    pub fn new_blank_node(str: &str) -> Result<Self, Error> {
+    pub fn new_blank_node(str: &str) -> Result<Self, RDFStoreError> {
         Ok(Term::BlankNode(
             LexicalValue::from_type_and_buffer(DataType::BlankNode, str)?.unwrap(),
         ))
@@ -51,7 +51,7 @@ impl Term {
 }
 
 impl FromStr for Term {
-    type Err = Error;
+    type Err = RDFStoreError;
 
     fn from_str(str: &str) -> Result<Self, Self::Err> { Term::new_str(str) }
 }
@@ -105,7 +105,7 @@ mod tests {
     }
 
     #[test_log::test]
-    fn test_term_05() -> Result<(), Error> {
+    fn test_term_05() -> Result<(), RDFStoreError> {
         let term: Term = "some string".parse()?;
 
         let turtle = format!("{}", term.display_turtle());
@@ -116,7 +116,7 @@ mod tests {
     }
 
     #[test_log::test]
-    fn test_term_06() -> Result<(), Error> {
+    fn test_term_06() -> Result<(), RDFStoreError> {
         let term: Term = "\"some string\"^^xsd:string".parse()?;
 
         let turtle = format!("{}", term.display_turtle());

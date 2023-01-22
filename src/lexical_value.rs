@@ -14,7 +14,7 @@ use serde::{Serialize, Serializer};
 use crate::{
     LexicalValueUnion,
     DataType,
-    Error::{self, Unknown},
+    RDFStoreError::{self, Unknown},
     Term,
 };
 
@@ -258,13 +258,13 @@ impl LexicalValue {
     }
 
     /// Provide the IRI as an iri-string IRI
-    pub fn as_iri_string_iri(&self) -> Result<Option<IriReferenceString>, Error> {
+    pub fn as_iri_string_iri(&self) -> Result<Option<IriReferenceString>, RDFStoreError> {
         if let Some(iri) = self.as_iri() {
             match IriReferenceString::try_from(iri.as_str()) {
                 Ok(iri_string_iri) => Ok(Some(iri_string_iri)),
                 Err(err) => {
                     tracing::error!("Could not parse IRI: {iri:}");
-                    Err(Error::IriStringParseError(err))
+                    Err(RDFStoreError::IriStringParseError(err))
                 },
             }
         } else {
@@ -374,7 +374,7 @@ impl LexicalValue {
     pub fn from_type_and_c_buffer(
         data_type: DataType,
         buffer: &[u8],
-    ) -> Result<Option<LexicalValue>, Error> {
+    ) -> Result<Option<LexicalValue>, RDFStoreError> {
         let str_buffer = std::ffi::CStr::from_bytes_until_nul(buffer)
             .map_err(|err| {
                 tracing::error!("Cannot read buffer: {err:?}");
@@ -391,7 +391,7 @@ impl LexicalValue {
     pub fn from_type_and_buffer(
         data_type: DataType,
         buffer: &str,
-    ) -> Result<Option<LexicalValue>, Error> {
+    ) -> Result<Option<LexicalValue>, RDFStoreError> {
         match data_type {
             DataType::AnyUri | DataType::IriReference => {
                 let iri = IriBuf::from_str(buffer)?;
@@ -414,7 +414,7 @@ impl LexicalValue {
                         )?))
                     },
                     _ => {
-                        Err(Error::UnknownNTriplesValue {
+                        Err(RDFStoreError::UnknownNTriplesValue {
                             value: buffer.to_string(),
                         })
                     },
@@ -472,7 +472,7 @@ impl LexicalValue {
         }
     }
 
-    pub fn from_iri(iri: &Iri) -> Result<Self, Error> {
+    pub fn from_iri(iri: &Iri) -> Result<Self, RDFStoreError> {
         Ok(LexicalValue {
             data_type: DataType::IriReference,
             value:     LexicalValueUnion {
@@ -481,15 +481,15 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_plain_literal_string(str: &str) -> Result<Self, Error> {
+    pub fn new_plain_literal_string(str: &str) -> Result<Self, RDFStoreError> {
         Self::new_string_with_datatype(str, DataType::PlainLiteral)
     }
 
-    pub fn new_plain_literal_boolean(boolean: bool) -> Result<Self, Error> {
+    pub fn new_plain_literal_boolean(boolean: bool) -> Result<Self, RDFStoreError> {
         Self::new_string_with_datatype(boolean.to_string().as_str(), DataType::PlainLiteral)
     }
 
-    pub fn new_string_with_datatype(str: &str, data_type: DataType) -> Result<Self, Error> {
+    pub fn new_string_with_datatype(str: &str, data_type: DataType) -> Result<Self, RDFStoreError> {
         assert!(&data_type.is_string(), "{data_type:?} is not a string type");
         Ok(LexicalValue {
             data_type,
@@ -497,7 +497,7 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_date_time_with_datatype(str: &str, data_type: DataType) -> Result<Self, Error> {
+    pub fn new_date_time_with_datatype(str: &str, data_type: DataType) -> Result<Self, RDFStoreError> {
         assert!(&data_type.is_date_time(), "{data_type:?} is not a dateTime");
         Ok(LexicalValue {
             data_type,
@@ -505,7 +505,7 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_decimal_with_datatype(str: &str, data_type: DataType) -> Result<Self, Error> {
+    pub fn new_decimal_with_datatype(str: &str, data_type: DataType) -> Result<Self, RDFStoreError> {
         assert!(&data_type.is_decimal(), "{data_type:?} is not a decimal");
         Ok(LexicalValue {
             data_type,
@@ -513,7 +513,7 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_duration_with_datatype(str: &str, data_type: DataType) -> Result<Self, Error> {
+    pub fn new_duration_with_datatype(str: &str, data_type: DataType) -> Result<Self, RDFStoreError> {
         assert!(&data_type.is_duration(), "{data_type:?} is not a duration");
         Ok(LexicalValue {
             data_type,
@@ -524,12 +524,12 @@ impl LexicalValue {
     pub fn new_iri_from_string_with_datatype(
         iri_string: &str,
         data_type: DataType,
-    ) -> Result<Self, Error> {
+    ) -> Result<Self, RDFStoreError> {
         let iri = IriBuf::from_str(iri_string)?;
         Self::new_iri_with_datatype(&iri.as_iri(), data_type)
     }
 
-    pub fn new_iri_with_datatype(iri: &Iri, data_type: DataType) -> Result<Self, Error> {
+    pub fn new_iri_with_datatype(iri: &Iri, data_type: DataType) -> Result<Self, RDFStoreError> {
         assert!(&data_type.is_iri(), "{data_type:?} is not an IRI type");
         Ok(LexicalValue {
             data_type,
@@ -537,7 +537,7 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_blank_node_with_datatype(id: &str, data_type: DataType) -> Result<Self, Error> {
+    pub fn new_blank_node_with_datatype(id: &str, data_type: DataType) -> Result<Self, RDFStoreError> {
         assert!(
             &data_type.is_blank_node(),
             "{data_type:?} is not a blank node type"
@@ -548,23 +548,23 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_boolean(boolean: bool) -> Result<Self, Error> {
+    pub fn new_boolean(boolean: bool) -> Result<Self, RDFStoreError> {
         Self::new_boolean_with_datatype(boolean, DataType::Boolean)
     }
 
-    pub fn new_boolean_from_string(boolean_string: &str) -> Result<Self, Error> {
+    pub fn new_boolean_from_string(boolean_string: &str) -> Result<Self, RDFStoreError> {
         Self::new_boolean_from_string_with_datatype(boolean_string, DataType::Boolean)
     }
 
     pub fn new_boolean_from_string_with_datatype(
         boolean_string: &str,
         data_type: DataType,
-    ) -> Result<Self, Error> {
+    ) -> Result<Self, RDFStoreError> {
         match boolean_string {
             "true" => Self::new_boolean_with_datatype(true, data_type),
             "false" => Self::new_boolean_with_datatype(false, data_type),
             &_ => {
-                Err(Error::UnknownValueForDataType {
+                Err(RDFStoreError::UnknownValueForDataType {
                     data_type,
                     value: boolean_string.to_string(),
                 })
@@ -572,7 +572,7 @@ impl LexicalValue {
         }
     }
 
-    pub fn new_boolean_with_datatype(boolean: bool, data_type: DataType) -> Result<Self, Error> {
+    pub fn new_boolean_with_datatype(boolean: bool, data_type: DataType) -> Result<Self, RDFStoreError> {
         assert!(
             &data_type.is_boolean(),
             "{data_type:?} is not a boolean type"
@@ -583,7 +583,7 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_signed_integer(signed_integer: i64) -> Result<Self, Error> {
+    pub fn new_signed_integer(signed_integer: i64) -> Result<Self, RDFStoreError> {
         if signed_integer >= 0 {
             Self::new_unsigned_integer(signed_integer as u64)
         } else {
@@ -594,7 +594,7 @@ impl LexicalValue {
     pub fn new_signed_integer_with_datatype(
         signed_integer: i64,
         data_type: DataType,
-    ) -> Result<Self, Error> {
+    ) -> Result<Self, RDFStoreError> {
         assert!(
             &data_type.is_signed_integer(),
             "{data_type:?} is not an signed integer type"
@@ -605,14 +605,14 @@ impl LexicalValue {
         })
     }
 
-    pub fn new_unsigned_integer(unsigned_integer: u64) -> Result<Self, Error> {
+    pub fn new_unsigned_integer(unsigned_integer: u64) -> Result<Self, RDFStoreError> {
         Self::new_unsigned_integer_with_datatype(unsigned_integer, DataType::PositiveInteger)
     }
 
     pub fn new_unsigned_integer_with_datatype(
         unsigned_integer: u64,
         data_type: DataType,
-    ) -> Result<Self, Error> {
+    ) -> Result<Self, RDFStoreError> {
         assert!(
             &data_type.is_unsigned_integer(),
             "{data_type:?} is not an unsigned integer type"
@@ -699,7 +699,7 @@ impl LexicalValue {
 }
 
 impl FromStr for LexicalValue {
-    type Err = Error;
+    type Err = RDFStoreError;
 
     fn from_str(str: &str) -> Result<Self, Self::Err> { Self::new_plain_literal_string(str) }
 }
@@ -713,7 +713,7 @@ mod tests {
     use crate::{Error, LexicalValue};
 
     #[test]
-    fn test_as_local_name_01() -> Result<(), Error> {
+    fn test_as_local_name_01() -> Result<(), RDFStoreError> {
         let val = LexicalValue::from_iri(&IriBuf::from_str("https://whatever.kg/id/abc")?.as_iri());
         assert!(val.is_ok());
         let val = val.unwrap();
@@ -725,7 +725,7 @@ mod tests {
     }
 
     #[test]
-    fn test_as_local_name_02() -> Result<(), Error> {
+    fn test_as_local_name_02() -> Result<(), RDFStoreError> {
         let val = LexicalValue::from_iri(&IriBuf::from_str("https://whatever.kg/id#abc")?.as_iri());
         assert!(val.is_ok());
         let val = val.unwrap();

@@ -47,19 +47,19 @@ impl Graph {
         )
     }
 
-    pub fn as_iri_buf(&self) -> Result<iref::IriBuf, crate::Error> {
+    pub fn as_iri_buf(&self) -> Result<iref::IriBuf, crate::RDFStoreError> {
         self.namespace
             .with_local_name(self.local_name.as_str())
-            .map_err(crate::Error::from)
+            .map_err(crate::RDFStoreError::from)
     }
 
     pub fn as_display_iri(&self) -> GraphDisplayIRI { GraphDisplayIRI { graph: self } }
 
-    pub fn as_c_string(&self) -> Result<CString, crate::Error> {
-        CString::new(self.as_iri_buf()?.as_str()).map_err(crate::Error::from)
+    pub fn as_c_string(&self) -> Result<CString, crate::RDFStoreError> {
+        CString::new(self.as_iri_buf()?.as_str()).map_err(crate::RDFStoreError::from)
     }
 
-    pub fn as_lexical_value(&self) -> Result<LexicalValue, crate::Error> {
+    pub fn as_lexical_value(&self) -> Result<LexicalValue, crate::RDFStoreError> {
         Ok(LexicalValue::from_iri(
             &self.as_iri_buf()?.as_iri(),
         )?)

@@ -7,7 +7,7 @@ authors = [
     "Jacobus Geluk <jacobus.geluk@ekgf.org>",
     "Marcelo Barbieri <marcelo.barbieri@agnos.ai>"
 ]
-publish = false
+publish = true
 repository = "https://github.com/EKGF/rdf-store-rs"
 keywords = [ "rdf", "sparql", "database", "graph-database"]
 categories = [ "database" ]
@@ -58,5 +58,5 @@ rustc-args = ["--cfg", "docsrs"]
 
 [features]
 default = ["nom"]
-rdftk_support = ["rdftk_iri/uuid_iri"]
+rdftk-support = ["rdftk_iri/uuid_iri"]
 nom_support = ["nom"]
