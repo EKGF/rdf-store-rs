@@ -64,7 +64,7 @@ pub enum RDFStoreError {
     R2D2Error(#[from] r2d2::Error),
 }
 
-#[cfg(feature = "nom_support")]
+#[cfg(feature = "nom-support")]
 impl<I: From<&'static str>> From<RDFStoreError> for nom::Err<nom::error::Error<I>> {
     fn from(_: RDFStoreError) -> Self {
         nom::Err::Error(nom::error::Error::new(
