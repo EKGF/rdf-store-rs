@@ -64,7 +64,7 @@ impl From<LexicalValue> for Term {
 mod tests {
     use iref::Iri;
 
-    use crate::{Term, Error};
+    use crate::{RDFStoreError, Term};
 
     #[test_log::test]
     fn test_term_01() {

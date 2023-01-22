@@ -1,6 +1,5 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
-use std::str::FromStr;
 use iref::{Iri, IriBuf};
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -43,7 +42,7 @@ impl Prefix {
     /// Return an identifier based on the current namespace IRI and the given local name
     /// within that namespace.
     pub fn with_local_name(&self, name: &str) -> Result<IriBuf, iref::Error> {
-
+        use std::str::FromStr;
         let iri_str = match *self.iri.as_bytes().last().unwrap() as char {
             '/' | '#' => format!("{}{name}", self.iri.as_str()),
             _ => panic!("{} does not end with either / or #", self.iri.as_str())

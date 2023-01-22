@@ -14,6 +14,7 @@ mod resource_value;
 mod term;
 mod c_utils;
 pub mod consts;
+mod class;
 
 pub use prefix::Prefix;
 pub use predicate::Predicate;
@@ -25,3 +26,4 @@ pub use data_type::DataType;
 pub use resource_value::ResourceValue;
 pub use term::Term;
 pub use c_utils::ptr_to_cstr;
+pub use class::Class;

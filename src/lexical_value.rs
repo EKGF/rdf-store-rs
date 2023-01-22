@@ -710,7 +710,7 @@ mod tests {
 
     use iref::IriBuf;
 
-    use crate::{Error, LexicalValue};
+    use crate::{ LexicalValue, RDFStoreError};
 
     #[test]
     fn test_as_local_name_01() -> Result<(), RDFStoreError> {
