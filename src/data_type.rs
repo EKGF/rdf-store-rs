@@ -8,6 +8,7 @@ use {
 };
 
 static XSD_DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
+    "http://www.w3.org/2001/XMLSchema#anyURI" => DataType::AnyUri,
     "http://www.w3.org/2001/XMLSchema#boolean" => DataType::Boolean,
     "http://www.w3.org/2001/XMLSchema#byte" => DataType::Byte,
     "http://www.w3.org/2001/XMLSchema#date" => DataType::Date,
@@ -97,6 +98,19 @@ impl DataType {
         } else {
             Err(RDFStoreError::UnknownXsdDataType { data_type_iri: iri.to_string() })
         }
+    }
+
+    pub fn as_xsd_iri_str(&self) -> &'static str {
+        XSD_DATA_TYPE_MAP
+            .entries()
+            .find_map(|(key, val)| {
+                if val == self {
+                    Some(key)
+                } else {
+                    panic!("Unknown data type")
+                }
+            })
+            .unwrap()
     }
 
     #[inline]

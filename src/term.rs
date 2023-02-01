@@ -4,32 +4,32 @@ use std::str::FromStr;
 
 use iref::Iri;
 
-use super::LexicalValue;
+use super::Literal;
 use crate::{DataType, RDFStoreError};
 
 /// An RDF Term is either an IRI, a literal or a blank node.
 /// See <https://www.w3.org/TR/rdf11-concepts/#section-triples>
 #[derive(Debug)]
 pub enum Term {
-    Iri(LexicalValue),
-    Literal(LexicalValue),
-    BlankNode(LexicalValue),
+    Iri(Literal),
+    Literal(Literal),
+    BlankNode(Literal),
 }
 
 impl Term {
-    pub fn new_iri(iri: &Iri) -> Result<Self, RDFStoreError> { Ok(Term::Iri(LexicalValue::from_iri(iri)?)) }
+    pub fn new_iri(iri: &Iri) -> Result<Self, RDFStoreError> { Ok(Term::Iri(Literal::from_iri(iri)?)) }
 
     pub fn new_iri_from_str(iri_str: &str) -> Result<Self, RDFStoreError> {
         Term::new_iri(&Iri::new(iri_str)?)
     }
 
     pub fn new_str(str: &str) -> Result<Self, RDFStoreError> {
-        Ok(Term::Literal(LexicalValue::from_str(str)?))
+        Ok(Term::Literal(Literal::from_str(str)?))
     }
 
     pub fn new_blank_node(str: &str) -> Result<Self, RDFStoreError> {
         Ok(Term::BlankNode(
-            LexicalValue::from_type_and_buffer(DataType::BlankNode, str)?.unwrap(),
+            Literal::from_type_and_buffer(DataType::BlankNode, str)?.unwrap(),
         ))
     }
 
@@ -56,8 +56,8 @@ impl FromStr for Term {
     fn from_str(str: &str) -> Result<Self, Self::Err> { Term::new_str(str) }
 }
 
-impl From<LexicalValue> for Term {
-    fn from(value: LexicalValue) -> Self { value.as_term() }
+impl From<Literal> for Term {
+    fn from(value: Literal) -> Self { value.as_term() }
 }
 
 #[cfg(test)]

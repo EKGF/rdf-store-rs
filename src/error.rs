@@ -3,8 +3,7 @@
 
 extern crate alloc;
 
-use {thiserror::Error};
-use crate::DataType;
+use {crate::DataType, thiserror::Error};
 
 #[derive(Error, Debug)]
 pub enum RDFStoreError {
@@ -30,6 +29,8 @@ pub enum RDFStoreError {
         multiplicity: u64,
         query:        String,
     },
+    #[error("Cannot get any argument indexes from the cursor of:\n{query}")]
+    CannotGetAnyArgumentIndexes { query: String },
     #[error("Maximum number of rows ({maxrow}) has been exceeded for query:\n{query}")]
     ExceededMaximumNumberOfRows { maxrow: u64, query: String },
     #[error("Could not find a license key")]

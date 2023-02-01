@@ -5,7 +5,8 @@ use std::mem::ManuallyDrop;
 
 use iref::{Iri, IriBuf};
 
-pub union LexicalValueUnion {
+/// A `LiteralValue` is, together with [DataType], part of a [Literal].
+pub union LiteralValue {
     pub iri:              ManuallyDrop<IriBuf>,
     pub string:           ManuallyDrop<String>,
     pub boolean:          bool,
@@ -14,7 +15,7 @@ pub union LexicalValueUnion {
     pub blank_node:       ManuallyDrop<String>,
 }
 
-impl Default for LexicalValueUnion {
+impl Default for LiteralValue {
     fn default() -> Self {
         Self {
             boolean: false
@@ -22,39 +23,39 @@ impl Default for LexicalValueUnion {
     }
 }
 
-impl LexicalValueUnion {
+impl LiteralValue {
     pub fn new_string(str: &str) -> Self {
-        LexicalValueUnion {
+        LiteralValue {
             string: ManuallyDrop::new(str.to_string()),
         }
     }
 
     pub fn new_iri(iri: &Iri) -> Self {
-        LexicalValueUnion {
+        LiteralValue {
             iri: ManuallyDrop::new(IriBuf::from(iri)),
         }
     }
 
     pub fn new_boolean(boolean: bool) -> Self {
-        LexicalValueUnion {
+        LiteralValue {
             boolean,
         }
     }
 
     pub fn new_unsigned_integer(unsigned_integer: u64) -> Self {
-        LexicalValueUnion {
+        LiteralValue {
             unsigned_integer,
         }
     }
 
     pub fn new_signed_integer(signed_integer: i64) -> Self {
-        LexicalValueUnion {
+        LiteralValue {
             signed_integer,
         }
     }
 
     pub fn new_blank_node(blank_node: &str) -> Self {
-        LexicalValueUnion {
+        LiteralValue {
             blank_node: ManuallyDrop::new(blank_node.to_string()),
         }
     }

@@ -2,7 +2,7 @@
 //---------------------------------------------------------------
 
 use {crate::Prefix, std::ffi::CString};
-use crate::LexicalValue;
+use crate::Literal;
 
 #[derive(Debug, Clone)]
 pub struct Graph {
@@ -59,8 +59,8 @@ impl Graph {
         CString::new(self.as_iri_buf()?.as_str()).map_err(crate::RDFStoreError::from)
     }
 
-    pub fn as_lexical_value(&self) -> Result<LexicalValue, crate::RDFStoreError> {
-        Ok(LexicalValue::from_iri(
+    pub fn as_lexical_value(&self) -> Result<Literal, crate::RDFStoreError> {
+        Ok(Literal::from_iri(
             &self.as_iri_buf()?.as_iri(),
         )?)
     }
