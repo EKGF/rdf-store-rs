@@ -107,7 +107,7 @@ impl DataType {
                 if val == self {
                     Some(key)
                 } else {
-                    panic!("Unknown data type")
+                    None
                 }
             })
             .unwrap()
