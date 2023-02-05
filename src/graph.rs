@@ -56,7 +56,10 @@ impl Graph {
     pub fn as_display_iri(&self) -> GraphDisplayIRI { GraphDisplayIRI { graph: self } }
 
     pub fn as_c_string(&self) -> Result<CString, crate::RDFStoreError> {
-        CString::new(self.as_iri_buf()?.as_str()).map_err(crate::RDFStoreError::from)
+        // Wrap the graph IRI into a Literal first so that it can convert it into a
+        // turtle style identifier first
+        let literal = self.as_lexical_value()?;
+        CString::new(literal.to_string().as_str()).map_err(crate::RDFStoreError::from)
     }
 
     pub fn as_lexical_value(&self) -> Result<Literal, crate::RDFStoreError> {

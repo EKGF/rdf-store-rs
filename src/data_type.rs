@@ -7,14 +7,18 @@ use {
     serde::Serialize,
 };
 
-static XSD_DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
+static DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
+    "Unbound Value" => DataType::UnboundValue,
+    "Blank Node" => DataType::BlankNode,
+    "IRI Reference" => DataType::IriReference,
+    "http://www.w3.org/2000/01/rdf-schema#Literal" => DataType::Literal,
     "http://www.w3.org/2001/XMLSchema#anyURI" => DataType::AnyUri,
     "http://www.w3.org/2001/XMLSchema#boolean" => DataType::Boolean,
     "http://www.w3.org/2001/XMLSchema#byte" => DataType::Byte,
     "http://www.w3.org/2001/XMLSchema#date" => DataType::Date,
     "http://www.w3.org/2001/XMLSchema#dateTime" => DataType::DateTime,
     "http://www.w3.org/2001/XMLSchema#dateTimeStamp" => DataType::DateTimeStamp,
-    "http://www.w3.org/2001/XMLSchema#day" => DataType::Day,
+    "http://www.w3.org/2001/XMLSchema#gDay" => DataType::Day,
     "http://www.w3.org/2001/XMLSchema#dayTimeDuration" => DataType::DayTimeDuration,
     "http://www.w3.org/2001/XMLSchema#decimal" => DataType::Decimal,
     "http://www.w3.org/2001/XMLSchema#double" => DataType::Double,
@@ -23,8 +27,8 @@ static XSD_DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
     "http://www.w3.org/2001/XMLSchema#int" => DataType::Int,
     "http://www.w3.org/2001/XMLSchema#integer" => DataType::Integer,
     "http://www.w3.org/2001/XMLSchema#long" => DataType::Long,
-    "http://www.w3.org/2001/XMLSchema#month" => DataType::Month,
-    "http://www.w3.org/2001/XMLSchema#monthDay" => DataType::MonthDay,
+    "http://www.w3.org/2001/XMLSchema#gMonth" => DataType::Month,
+    "http://www.w3.org/2001/XMLSchema#gMonthDay" => DataType::MonthDay,
     "http://www.w3.org/2001/XMLSchema#negativeInteger" => DataType::NegativeInteger,
     "http://www.w3.org/2001/XMLSchema#nonNegativeInteger" => DataType::NonNegativeInteger,
     "http://www.w3.org/2001/XMLSchema#nonPositiveInteger" => DataType::NonPositiveInteger,
@@ -35,49 +39,87 @@ static XSD_DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
     "http://www.w3.org/2001/XMLSchema#unsignedInt" => DataType::UnsignedInt,
     "http://www.w3.org/2001/XMLSchema#unsignedLong" => DataType::UnsignedLong,
     "http://www.w3.org/2001/XMLSchema#unsignedShort" => DataType::UnsignedShort,
-    "http://www.w3.org/2001/XMLSchema#year" => DataType::Year,
-    "http://www.w3.org/2001/XMLSchema#yearMonth" => DataType::YearMonth,
+    "http://www.w3.org/2001/XMLSchema#gYear" => DataType::Year,
+    "http://www.w3.org/2001/XMLSchema#gYearMonth" => DataType::YearMonth,
     "http://www.w3.org/2001/XMLSchema#yearMonthDuration" => DataType::YearMonthDuration,
 };
 
+/// The XSD DataType of a given [`Literal`].
+/// See also <https://docs.oxfordsemantic.tech/_javadoc/tech/oxfordsemantic/jrdfox/logic/Datatype.html>.
 #[derive(Debug, Eq, PartialEq, Hash, Copy, Clone, TryFromPrimitive, Serialize)]
 #[repr(u8)]
 pub enum DataType {
+    /// INVALID_DATATYPE
     UnboundValue       = 0,
+    /// BLANK_NODE
     BlankNode          = 1,
+    /// IRI_REFERENCE
     IriReference       = 2,
+    /// RDFS_LITERAL
     Literal            = 3,
+    /// XSD_ANY_URI
     AnyUri             = 4,
+    /// XSD_STRING
     String             = 5,
+    /// RDF_PLAIN_LITERAL
     PlainLiteral       = 6,
+    /// XSD_BOOLEAN
     Boolean            = 7,
+    /// XSD_DATE_TIME
     DateTime           = 8,
+    /// XSD_DATE_TIME_STAMP
     DateTimeStamp      = 9,
+    /// XSD_TIME
     Time               = 10,
+    /// XSD_DATE
     Date               = 11,
+    /// XSD_G_YEAR_MONTH
     YearMonth          = 12,
+    /// XSD_G_YEAR
     Year               = 13,
+    /// XSD_G_MONTH_DAY
     MonthDay           = 14,
+    /// XSD_G_DAY
     Day                = 15,
+    /// XSD_G_MONTH
     Month              = 16,
+    /// XSD_DURATION
     Duration           = 17,
+    /// XSD_YEAR_MONTH_DURATION
     YearMonthDuration  = 18,
+    /// XSD_DAY_TIME_DURATION
     DayTimeDuration    = 19,
+    /// XSD_DOUBLE
     Double             = 20,
+    /// XSD_FLOAT
     Float              = 21,
+    /// XSD_DECIMAL
     Decimal            = 22,
+    /// XSD_INTEGER
     Integer            = 23,
+    /// XSD_NON_NEGATIVE_INTEGER
     NonNegativeInteger = 24,
+    /// XSD_NON_POSITIVE_INTEGER
     NonPositiveInteger = 25,
+    /// XSD_NEGATIVE_INTEGER
     NegativeInteger    = 26,
+    /// XSD_POSITIVE_INTEGER
     PositiveInteger    = 27,
+    /// XSD_LONG
     Long               = 28,
+    /// XSD_INT
     Int                = 29,
+    /// XSD_SHORT
     Short              = 30,
+    /// XSD_BYTE
     Byte               = 31,
+    /// XSD_UNSIGNED_LONG
     UnsignedLong       = 32,
+    /// XSD_UNSIGNED_INT
     UnsignedInt        = 33,
+    /// XSD_UNSIGNED_SHORT
     UnsignedShort      = 34,
+    /// XSD_UNSIGNED_BYTE
     UnsignedByte       = 35,
 }
 
@@ -93,7 +135,7 @@ impl DataType {
     }
 
     pub fn from_xsd_iri(iri: &str) -> Result<Self, RDFStoreError> {
-        if let Some(data_type) = XSD_DATA_TYPE_MAP.get(iri) {
+        if let Some(data_type) = DATA_TYPE_MAP.get(iri) {
             Ok(data_type.clone())
         } else {
             Err(RDFStoreError::UnknownXsdDataType { data_type_iri: iri.to_string() })
@@ -101,7 +143,7 @@ impl DataType {
     }
 
     pub fn as_xsd_iri_str(&self) -> &'static str {
-        XSD_DATA_TYPE_MAP
+        DATA_TYPE_MAP
             .entries()
             .find_map(|(key, val)| {
                 if val == self {
@@ -110,7 +152,9 @@ impl DataType {
                     None
                 }
             })
-            .unwrap()
+            .unwrap_or_else(|| {
+                panic!("You've managed to create an unknown DataType instance")
+            })
     }
 
     #[inline]
