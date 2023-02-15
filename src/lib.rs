@@ -1,6 +1,5 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
-#![feature(cstr_from_bytes_until_nul)]
 #![doc = include_str!("../README.md")]
 
 mod prefix;
