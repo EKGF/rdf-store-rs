@@ -6,6 +6,9 @@ use {
     std::ffi::CString,
 };
 
+/// Similar to [`Class`](crate::Class), the `Graph` struct represents an RDF
+/// named graph identifier, also known as a "context identifier", consisting of
+/// a [`Prefix`] (i.e. a namespace) and a "local name".
 #[derive(Debug, Clone)]
 pub struct Graph {
     pub namespace:  Prefix,

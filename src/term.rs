@@ -7,6 +7,7 @@ use {
 };
 
 /// An RDF Term is either an IRI, a literal or a blank node.
+///
 /// See <https://www.w3.org/TR/rdf11-concepts/#section-triples>
 #[derive(Debug)]
 pub enum Term {
@@ -34,6 +35,13 @@ impl Term {
         ))
     }
 
+    /// Display a [`Term`] in human readable format.
+    ///
+    /// ```rust
+    /// let term = Term::new_iri(&Iri::new("https://whatever.url").unwrap()).unwrap();
+    /// let turtle = format!("{}", term.display_turtle());
+    /// assert_eq!(turtle, "<https://whatever.url>");
+    /// ```
     pub fn display_turtle<'a, 'b>(&'a self) -> impl std::fmt::Display + 'a + 'b
     where 'a: 'b {
         struct TurtleTerm<'b>(&'b Term);

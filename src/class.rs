@@ -3,6 +3,8 @@
 
 use crate::{Literal, Prefix, RDFStoreError};
 
+/// The `Class` struct represents an RDFS or OWL class identifier
+/// consisting of a [`Prefix`] (i.e. a namespace) and a "local name".
 #[derive(Debug, Clone)]
 pub struct Class {
     pub prefix:     Prefix,

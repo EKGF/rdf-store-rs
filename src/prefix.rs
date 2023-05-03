@@ -2,6 +2,14 @@
 //---------------------------------------------------------------
 use iref::{Iri, IriBuf};
 
+/// A `Prefix` represents a namespace IRI that can also be shown
+/// in abbreviated format.
+///
+/// For instance, the namespace IRI <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+/// can also be shown (in [RDF Turtle](https://www.w3.org/TR/turtle/#prefixed-name)
+/// or SPARQL for instance) as `rdf:`.
+/// A "local name" such as "type" in such a namespace would look
+/// like <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> or like `rdf:type`.
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Prefix {
     /// assumed to end with ':'
@@ -12,7 +20,12 @@ pub struct Prefix {
 
 impl std::fmt::Display for Prefix {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} <{}>", self.name.as_str(), self.iri.as_str())
+        write!(
+            f,
+            "{} <{}>",
+            self.name.as_str(),
+            self.iri.as_str()
+        )
     }
 }
 
@@ -20,12 +33,7 @@ impl Prefix {
     pub fn declare<'a, Base: Into<Iri<'a>>>(name: &str, iri: Base) -> Self {
         let iri = iri.into();
         match iri.as_str().chars().last() {
-            Some('/') | Some('#') => {
-                Self {
-                    name: name.to_string(),
-                    iri:  IriBuf::from(iri),
-                }
-            },
+            Some('/') | Some('#') => Self { name: name.to_string(), iri: IriBuf::from(iri) },
             _ => {
                 Self {
                     name: name.to_string(),
@@ -39,13 +47,18 @@ impl Prefix {
         Self::declare(name, Iri::from_str(iri).unwrap())
     }
 
-    /// Return an identifier based on the current namespace IRI and the given local name
-    /// within that namespace.
+    /// Return an identifier based on the current namespace IRI and the given
+    /// local name within that namespace.
     pub fn with_local_name(&self, name: &str) -> Result<IriBuf, iref::Error> {
         use std::str::FromStr;
         let iri_str = match *self.iri.as_bytes().last().unwrap() as char {
             '/' | '#' => format!("{}{name}", self.iri.as_str()),
-            _ => panic!("{} does not end with either / or #", self.iri.as_str())
+            _ => {
+                panic!(
+                    "{} does not end with either / or #",
+                    self.iri.as_str()
+                )
+            },
         };
 
         IriBuf::from_str(iri_str.as_str())
@@ -65,7 +78,7 @@ impl Prefix {
 
 #[cfg(test)]
 mod tests {
-    use {iref::Iri, super::Prefix};
+    use {super::Prefix, iref::Iri};
 
     #[test_log::test]
     fn test_a_prefix() -> Result<(), iref::Error> {
@@ -90,5 +103,4 @@ mod tests {
         assert_eq!(x.as_str(), "http://whatever.kom/test/abc");
         Ok(())
     }
-
 }

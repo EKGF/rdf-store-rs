@@ -1,11 +1,13 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 
-use std::mem::ManuallyDrop;
+use {
+    iref::{Iri, IriBuf},
+    std::mem::ManuallyDrop,
+};
 
-use iref::{Iri, IriBuf};
-
-/// A `LiteralValue` is, together with [DataType], part of a [Literal].
+/// A `LiteralValue` is, together with a [`DataType`](crate::DataType), part
+/// of a [`Literal`](crate::Literal).
 pub union LiteralValue {
     pub iri:              ManuallyDrop<IriBuf>,
     pub string:           ManuallyDrop<String>,
@@ -18,55 +20,23 @@ pub union LiteralValue {
 }
 
 impl Default for LiteralValue {
-    fn default() -> Self {
-        Self {
-            boolean: false
-        }
-    }
+    fn default() -> Self { Self { boolean: false } }
 }
 
 impl LiteralValue {
-    pub fn new_string(str: &str) -> Self {
-        Self {
-            string: ManuallyDrop::new(str.to_string()),
-        }
-    }
+    pub fn new_string(str: &str) -> Self { Self { string: ManuallyDrop::new(str.to_string()) } }
 
-    pub fn new_iri(iri: &Iri) -> Self {
-        Self {
-            iri: ManuallyDrop::new(IriBuf::from(iri)),
-        }
-    }
+    pub fn new_iri(iri: &Iri) -> Self { Self { iri: ManuallyDrop::new(IriBuf::from(iri)) } }
 
-    pub fn new_boolean(boolean: bool) -> Self {
-        Self {
-            boolean,
-        }
-    }
+    pub fn new_boolean(boolean: bool) -> Self { Self { boolean } }
 
-    pub fn new_unsigned_integer(unsigned_integer: u64) -> Self {
-        Self {
-            unsigned_integer,
-        }
-    }
+    pub fn new_unsigned_integer(unsigned_integer: u64) -> Self { Self { unsigned_integer } }
 
-    pub fn new_signed_integer(signed_integer: i64) -> Self {
-        Self {
-            signed_integer,
-        }
-    }
+    pub fn new_signed_integer(signed_integer: i64) -> Self { Self { signed_integer } }
 
-    pub fn new_date(date: chrono::NaiveDate) -> Self {
-        Self {
-            date: ManuallyDrop::new(date),
-        }
-    }
+    pub fn new_date(date: chrono::NaiveDate) -> Self { Self { date: ManuallyDrop::new(date) } }
 
-    pub fn new_date_time(date_time: chrono::DateTime<chrono::Utc>) -> Self {
-        Self {
-            date_time,
-        }
-    }
+    pub fn new_date_time(date_time: chrono::DateTime<chrono::Utc>) -> Self { Self { date_time } }
 
     pub fn new_blank_node(blank_node: &str) -> Self {
         Self {

@@ -20,17 +20,20 @@ use {
     },
 };
 
-/// From [RDF 1.1 Concepts and Abstract Syntax](https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal):
-///
 /// Literals are used for values such as strings, numbers, and dates.
+/// It consists of a [`DataType`] and a [`LiteralValue`].
+///
+/// (See also [RDF 1.1 Concepts and Abstract Syntax](https://www.w3.org/TR/rdf11-concepts/#section-Graph-Literal)).
+///
 /// A literal in an RDF graph consists of two or three elements:
 ///
 /// 1. a lexical form, being a Unicode string, which SHOULD be in
 ///    [Normal Form C](http://www.unicode.org/reports/tr15/)
 ///
 /// 2. a datatype IRI, being an IRI identifying a datatype that determines
-///    how the lexical form maps to a literal value, and if and only if the
-///    datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString,
+///    how the lexical form maps to a literal value,
+///
+/// 3. and if and only if the datatype IRI is <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString>,
 ///    a non-empty language tag as defined by [BCP47](https://www.rfc-editor.org/info/bcp47).
 ///    The language tag MUST be well-formed according to
 ///    section 2.2.9 of [BCP47](https://www.rfc-editor.org/info/bcp47).
@@ -674,7 +677,7 @@ impl Literal {
     }
 
     /// Use this only for naive dates
-    /// (see https://docs.rs/chrono/latest/chrono/naive/struct.NaiveDate.html)
+    /// (see <https://docs.rs/chrono/latest/chrono/naive/struct.NaiveDate.html>)
     pub fn new_date_with_datatype(
         date: chrono::NaiveDate,
         data_type: DataType,

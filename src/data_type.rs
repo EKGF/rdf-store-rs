@@ -45,7 +45,8 @@ static DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
     "http://www.w3.org/2001/XMLSchema#yearMonthDuration" => DataType::YearMonthDuration,
 };
 
-/// The XSD DataType of a given [`Literal`].
+/// The XSD DataType of a given [`Literal`](crate::Literal).
+///
 /// See also <https://docs.oxfordsemantic.tech/_javadoc/tech/oxfordsemantic/jrdfox/logic/Datatype.html>.
 #[derive(Debug, Eq, PartialEq, Hash, Copy, Clone, TryFromPrimitive)]
 #[cfg_attr(feature = "serde", derive(Serialize))]
