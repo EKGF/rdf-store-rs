@@ -13,6 +13,9 @@ keywords = [ "rdf", "sparql", "database", "graph-database"]
 categories = [ "database" ]
 license-file = "LICENSE"
 rust-version = "1.64"
+readme = "README.md"
+documentation = "https://ekgf.github.io/rdf-store-rs/rdf_store_rs/index.html#"
+exclude = [ ".github/*", ".idea/*", "rust-toolchain.toml", "cog.toml" ]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
