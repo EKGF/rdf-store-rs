@@ -7,6 +7,9 @@ on:
     branches:
       -  main
 
+env:
+  RUSTDOCFLAGS: --enable-index-page -Zunstable-options
+
 jobs:
   rustdoc:
     name: Rustdoc
