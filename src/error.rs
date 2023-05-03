@@ -46,6 +46,8 @@ pub enum RDFStoreError {
     CouldNotImportRDFFile,
     #[error("Invalid prefix name")]
     InvalidPrefixName,
+    #[error("Invalid literal value")]
+    InvalidLiteral,
     /// Represents all other cases of `std::io::Error`.
     #[error(transparent)]
     IOError(#[from] std::io::Error),
@@ -57,6 +59,15 @@ pub enum RDFStoreError {
     IriParseError(#[from] iref::Error),
     #[error(transparent)]
     IriStringParseError(#[from] iri_string::validate::Error),
+    #[error(transparent)]
+    ParseIntError(#[from] std::num::ParseIntError),
+
+    #[cfg(feature = "serde")]
+    #[error(transparent)]
+    SerdeJsonError(#[from] serde_json::Error),
+
+    #[error(transparent)]
+    DateParseError(#[from] chrono::ParseError),
 
     #[error(transparent)]
     CApiError(#[from] std::ffi::NulError),

@@ -12,6 +12,8 @@ pub union LiteralValue {
     pub boolean:          bool,
     pub unsigned_integer: u64,
     pub signed_integer:   i64,
+    pub date:             ManuallyDrop<chrono::NaiveDate>,
+    pub date_time:        chrono::DateTime<chrono::Utc>,
     pub blank_node:       ManuallyDrop<String>,
 }
 
@@ -25,37 +27,49 @@ impl Default for LiteralValue {
 
 impl LiteralValue {
     pub fn new_string(str: &str) -> Self {
-        LiteralValue {
+        Self {
             string: ManuallyDrop::new(str.to_string()),
         }
     }
 
     pub fn new_iri(iri: &Iri) -> Self {
-        LiteralValue {
+        Self {
             iri: ManuallyDrop::new(IriBuf::from(iri)),
         }
     }
 
     pub fn new_boolean(boolean: bool) -> Self {
-        LiteralValue {
+        Self {
             boolean,
         }
     }
 
     pub fn new_unsigned_integer(unsigned_integer: u64) -> Self {
-        LiteralValue {
+        Self {
             unsigned_integer,
         }
     }
 
     pub fn new_signed_integer(signed_integer: i64) -> Self {
-        LiteralValue {
+        Self {
             signed_integer,
         }
     }
 
+    pub fn new_date(date: chrono::NaiveDate) -> Self {
+        Self {
+            date: ManuallyDrop::new(date),
+        }
+    }
+
+    pub fn new_date_time(date_time: chrono::DateTime<chrono::Utc>) -> Self {
+        Self {
+            date_time,
+        }
+    }
+
     pub fn new_blank_node(blank_node: &str) -> Self {
-        LiteralValue {
+        Self {
             blank_node: ManuallyDrop::new(blank_node.to_string()),
         }
     }

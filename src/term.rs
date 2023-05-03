@@ -1,11 +1,10 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
-use std::str::FromStr;
-
-use iref::Iri;
-
-use super::Literal;
-use crate::{DataType, RDFStoreError};
+use {
+    crate::{DataType, Literal, RDFStoreError},
+    iref::Iri,
+    std::str::FromStr,
+};
 
 /// An RDF Term is either an IRI, a literal or a blank node.
 /// See <https://www.w3.org/TR/rdf11-concepts/#section-triples>
@@ -17,7 +16,9 @@ pub enum Term {
 }
 
 impl Term {
-    pub fn new_iri(iri: &Iri) -> Result<Self, RDFStoreError> { Ok(Term::Iri(Literal::from_iri(iri)?)) }
+    pub fn new_iri(iri: &Iri) -> Result<Self, RDFStoreError> {
+        Ok(Term::Iri(Literal::from_iri(iri)?))
+    }
 
     pub fn new_iri_from_str(iri_str: &str) -> Result<Self, RDFStoreError> {
         Term::new_iri(&Iri::new(iri_str)?)
@@ -29,7 +30,7 @@ impl Term {
 
     pub fn new_blank_node(str: &str) -> Result<Self, RDFStoreError> {
         Ok(Term::BlankNode(
-            Literal::from_type_and_buffer(DataType::BlankNode, str)?.unwrap(),
+            Literal::from_type_and_buffer(DataType::BlankNode, str, None)?.unwrap(),
         ))
     }
 
@@ -62,9 +63,10 @@ impl From<Literal> for Term {
 
 #[cfg(test)]
 mod tests {
-    use iref::Iri;
-
-    use crate::{RDFStoreError, Term};
+    use {
+        crate::{RDFStoreError, Term},
+        iref::Iri,
+    };
 
     #[test_log::test]
     fn test_term_01() {

@@ -1,10 +1,11 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
+#[cfg(feature = "serde")]
+use serde::Serialize;
 use {
     crate::{RDFStoreError, RDFStoreError::UnknownDataType},
     num_enum::TryFromPrimitive,
     phf::phf_map,
-    serde::Serialize,
 };
 
 static DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
@@ -46,7 +47,8 @@ static DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
 
 /// The XSD DataType of a given [`Literal`].
 /// See also <https://docs.oxfordsemantic.tech/_javadoc/tech/oxfordsemantic/jrdfox/logic/Datatype.html>.
-#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone, TryFromPrimitive, Serialize)]
+#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone, TryFromPrimitive)]
+#[cfg_attr(feature = "serde", derive(Serialize))]
 #[repr(u8)]
 pub enum DataType {
     /// INVALID_DATATYPE
@@ -145,16 +147,12 @@ impl DataType {
     pub fn as_xsd_iri_str(&self) -> &'static str {
         DATA_TYPE_MAP
             .entries()
-            .find_map(|(key, val)| {
-                if val == self {
-                    Some(key)
-                } else {
-                    None
-                }
-            })
-            .unwrap_or_else(|| {
-                panic!("You've managed to create an unknown DataType instance")
-            })
+            .find_map(
+                |(key, val)| {
+                    if val == self { Some(key) } else { None }
+                },
+            )
+            .unwrap_or_else(|| panic!("You've managed to create an unknown DataType instance"))
     }
 
     #[inline]
@@ -248,6 +246,9 @@ impl DataType {
             _ => false,
         }
     }
+
+    #[inline]
+    pub fn is_integer(&self) -> bool { self.is_unsigned_integer() || self.is_signed_integer() }
 
     #[inline]
     pub fn is_blank_node(&self) -> bool {

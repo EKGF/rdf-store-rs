@@ -1,7 +1,7 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 
-use crate::{Prefix, RDFStoreError};
+use crate::{Literal, Prefix, RDFStoreError};
 
 #[derive(Debug, Clone)]
 pub struct Class {
@@ -41,12 +41,30 @@ impl Class {
         TurtleClass(self)
     }
 
-    pub fn plural_label(&self) -> String { format!("{}s", self.local_name) } // TODO: Make this slightly smarter
+    pub fn plural_label(&self) -> String { format!("{}s", self.local_name) }
+
+    // TODO: Make this slightly smarter
+
+    pub fn is_literal(&self, literal: &Literal) -> bool {
+        if let Some(that_iri) = literal.as_iri() {
+            if let Ok(this_iri) = self.as_iri() {
+                that_iri == this_iri.as_iri()
+            } else {
+                let iri = self.to_string();
+                literal.to_string() == iri
+            }
+        } else {
+            false
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use {crate::class::Class, super::Prefix};
+    use {
+        super::Prefix,
+        crate::{class::Class, DataType, Literal},
+    };
 
     #[test]
     fn test_a_class_01() {
@@ -68,5 +86,26 @@ mod tests {
         let class = Class::declare(prefix, "SomeClass");
         let s = format!("{}", class.as_iri().unwrap());
         assert_eq!(s, "https://whatever.com/test#SomeClass");
+    }
+
+    #[test]
+    fn test_is_literal() {
+        let prefix = Prefix::declare(
+            "test:",
+            iref::Iri::new("https://whatever.com/test#").unwrap(),
+        );
+        let class = Class::declare(prefix, "SomeClass");
+        let literal = Literal::from_type_and_buffer(
+            DataType::AnyUri,
+            "https://whatever.com/test#SomeClass",
+            None,
+        )
+        .unwrap();
+        assert!(literal.is_some());
+        assert_eq!(
+            class.as_iri().unwrap().as_str(),
+            "https://whatever.com/test#SomeClass"
+        );
+        assert!(class.is_literal(&literal.unwrap()))
     }
 }

@@ -1,8 +1,10 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 
-use {crate::Prefix, std::ffi::CString};
-use crate::Literal;
+use {
+    crate::{Literal, Prefix},
+    std::ffi::CString,
+};
 
 #[derive(Debug, Clone)]
 pub struct Graph {
@@ -63,9 +65,7 @@ impl Graph {
     }
 
     pub fn as_lexical_value(&self) -> Result<Literal, crate::RDFStoreError> {
-        Ok(Literal::from_iri(
-            &self.as_iri_buf()?.as_iri(),
-        )?)
+        Ok(Literal::from_iri(&self.as_iri_buf()?.as_iri())?)
     }
 }
 
