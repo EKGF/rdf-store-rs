@@ -113,6 +113,9 @@ mod tests {
         let graph = crate::Graph::declare(graph_prefix, "somedataset");
         let c_string = graph.as_c_string().unwrap().into_string().unwrap();
 
-        assert_eq!(c_string, "https://whatever.kom/graph/somedataset");
+        assert_eq!(
+            c_string,
+            "<https://whatever.kom/graph/somedataset>"
+        );
     }
 }

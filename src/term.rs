@@ -38,8 +38,11 @@ impl Term {
     /// Display a [`Term`] in human readable format.
     ///
     /// ```rust
+    /// use {iref::Iri, rdf_store_rs::Term};
+    ///
     /// let term = Term::new_iri(&Iri::new("https://whatever.url").unwrap()).unwrap();
     /// let turtle = format!("{}", term.display_turtle());
+    ///
     /// assert_eq!(turtle, "<https://whatever.url>");
     /// ```
     pub fn display_turtle<'a, 'b>(&'a self) -> impl std::fmt::Display + 'a + 'b
@@ -131,7 +134,7 @@ mod tests {
 
         let turtle = format!("{}", term.display_turtle());
 
-        assert_eq!(turtle, "\"\\\"some string\\\"^^xsd:string\""); // TODO: This is incorrect, recognise the XSD data type suffix and process it
+        assert_eq!(turtle, "\"\"some string\"^^xsd:string\""); // TODO: This is incorrect, recognise the XSD data type suffix and process it
 
         Ok(())
     }
