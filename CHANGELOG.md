@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.0.2](https://github.com/EKGF/rdf-store-rs/compare/0.0.1..0.0.2) - 2023-05-12
+
+- - -
+
 ## [0.0.1](https://github.com/EKGF/rdf-store-rs/compare/6e0d24fbc2d0e90c57c2250f0cd50d9d6a2d6e94..0.0.1) - 2023-05-12
 #### Continuous Integration
 - **(docs)** tweaking rustdoc publishing - ([c7719df](https://github.com/EKGF/rdf-store-rs/commit/c7719df2bf4c36066e98ce931b8d204990dd6a53)) - [@jgeluk](https://github.com/jgeluk)
