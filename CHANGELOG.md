@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.0.3](https://github.com/EKGF/rdf-store-rs/compare/0.0.2..0.0.3) - 2023-05-16
+#### Refactoring
+- **(cog)** minor changes - ([ff374b3](https://github.com/EKGF/rdf-store-rs/commit/ff374b389935ea7550ad0d7e41a364b5ac2e2fd5)) - [@jgeluk](https://github.com/jgeluk)
+- **(error)** minor changes - ([483b992](https://github.com/EKGF/rdf-store-rs/commit/483b9926fd433a5f0d89b25c7d3283197a43cfc6)) - [@jgeluk](https://github.com/jgeluk)
+
+- - -
+
 ## [0.0.2](https://github.com/EKGF/rdf-store-rs/compare/0.0.1..0.0.2) - 2023-05-12
 
 - - -
