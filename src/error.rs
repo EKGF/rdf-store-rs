@@ -25,14 +25,14 @@ pub enum RDFStoreError {
          ({maxrow}) for query:\n{query}"
     )]
     MultiplicityExceededMaximumNumberOfRows {
-        maxrow:       u64,
-        multiplicity: u64,
+        maxrow:       usize,
+        multiplicity: usize,
         query:        String,
     },
     #[error("Cannot get any argument indexes from the cursor of:\n{query}")]
     CannotGetAnyArgumentIndexes { query: String },
     #[error("Maximum number of rows ({maxrow}) has been exceeded for query:\n{query}")]
-    ExceededMaximumNumberOfRows { maxrow: u64, query: String },
+    ExceededMaximumNumberOfRows { maxrow: usize, query: String },
     #[error("Could not find a license key")]
     RDFoxLicenseFileNotFound,
     #[allow(dead_code)]
