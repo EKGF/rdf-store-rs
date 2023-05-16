@@ -2,11 +2,7 @@
 //---------------------------------------------------------------
 #[cfg(feature = "serde")]
 use serde::Serialize;
-use {
-    crate::{RDFStoreError, RDFStoreError::UnknownDataType},
-    num_enum::TryFromPrimitive,
-    phf::phf_map,
-};
+use {num_enum::TryFromPrimitive, phf::phf_map};
 
 static DATA_TYPE_MAP: phf::Map<&'static str, DataType> = phf_map! {
     "Unbound Value" => DataType::UnboundValue,
@@ -133,15 +129,16 @@ impl Default for DataType {
 }
 
 impl DataType {
-    pub fn from_datatype_id(data_type_id: u8) -> Result<DataType, RDFStoreError> {
-        DataType::try_from(data_type_id).map_err(|_err| UnknownDataType { data_type_id })
+    pub fn from_datatype_id(data_type_id: u8) -> Result<DataType, crate::RDFStoreError> {
+        DataType::try_from(data_type_id)
+            .map_err(|_err| crate::RDFStoreError::UnknownDataType { data_type_id })
     }
 
-    pub fn from_xsd_iri(iri: &str) -> Result<Self, RDFStoreError> {
+    pub fn from_xsd_iri(iri: &str) -> Result<Self, crate::RDFStoreError> {
         if let Some(data_type) = DATA_TYPE_MAP.get(iri) {
             Ok(data_type.clone())
         } else {
-            Err(RDFStoreError::UnknownXsdDataType { data_type_iri: iri.to_string() })
+            Err(crate::RDFStoreError::UnknownXsdDataType { data_type_iri: iri.to_string() })
         }
     }
 
