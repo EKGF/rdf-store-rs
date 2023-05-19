@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.0.5](https://github.com/EKGF/rdf-store-rs/compare/0.0.4..0.0.5) - 2023-05-19
+#### Bug Fixes
+- **(docs)** fix dependency with rdftk_iri - ([a906352](https://github.com/EKGF/rdf-store-rs/commit/a90635206564f59b2c634d751c26ad68b67a427e)) - [@jgeluk](https://github.com/jgeluk)
+
+- - -
+
 ## [0.0.4](https://github.com/EKGF/rdf-store-rs/compare/0.0.3..0.0.4) - 2023-05-16
 #### Refactoring
 - **(cog)** make the `cog` command also do the `cargo publish` task - ([1b408a9](https://github.com/EKGF/rdf-store-rs/commit/1b408a93c468a76d2cdf3d42caf3b3ec4b76503c)) - [@jgeluk](https://github.com/jgeluk)
