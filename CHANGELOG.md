@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.0.6](https://github.com/EKGF/rdf-store-rs/compare/0.0.5..0.0.6) - 2023-05-19
+#### Bug Fixes
+- **(docs)** fix target directory issue - ([c2af30d](https://github.com/EKGF/rdf-store-rs/commit/c2af30d0ad23182e6773eb486f41515d75a9489e)) - [@jgeluk](https://github.com/jgeluk)
+
+- - -
+
 ## [0.0.5](https://github.com/EKGF/rdf-store-rs/compare/0.0.4..0.0.5) - 2023-05-19
 #### Bug Fixes
 - **(docs)** fix dependency with rdftk_iri - ([a906352](https://github.com/EKGF/rdf-store-rs/commit/a90635206564f59b2c634d751c26ad68b67a427e)) - [@jgeluk](https://github.com/jgeluk)
