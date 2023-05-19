@@ -47,7 +47,7 @@ urlencoding = "2.1.2"
 getrandom = {version = "0.2.8", optional = true }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies.rdftk_iri]
-#git = "https://github.com/EKGF/rust-rdftk"
+git = "https://github.com/EKGF/rust-rdftk"
 version = "0.1.9"
 optional = true
 default-features = false

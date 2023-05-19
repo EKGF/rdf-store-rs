@@ -18,7 +18,7 @@ git-fetch-with-cli = true   # use the `git` executable for git operations
 [patch.crates-io]
 #rdftk_core      = { path = "../rust-rdftk/rdftk_core" }
 #rdftk_io        = { path = "../rust-rdftk/rdftk_io" }
-rdftk_iri       = { path = "../rust-rdftk/rdftk_iri" }
+#rdftk_iri       = { path = "../rust-rdftk/rdftk_iri" }
 #rdftk_names     = { path = "../rust-rdftk/rdftk_names" }
 #rdftk_ontology  = { path = "../rust-rdftk/rdftk_ontology" }
 #rdftk_query     = { path = "../rust-rdftk/rdftk_query" }
