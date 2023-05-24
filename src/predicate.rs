@@ -57,7 +57,7 @@ impl<'a> Predicate<'a> {
 #[cfg(test)]
 mod tests {
     use {
-        crate::{predicate::Predicate, prefix::Namespace},
+        crate::{namespace::Namespace, predicate::Predicate},
         iref::Iri,
     };
 

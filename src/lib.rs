@@ -9,8 +9,8 @@ mod data_type;
 mod error;
 mod graph;
 mod literal;
+mod namespace;
 mod predicate;
-mod prefix;
 mod term;
 
 pub use {
@@ -20,7 +20,7 @@ pub use {
     error::RDFStoreError,
     graph::Graph,
     literal::{Literal, LiteralIdUrlDisplay, LiteralUrlDisplay, LiteralValue},
+    namespace::Namespace,
     predicate::Predicate,
-    prefix::Namespace,
     term::Term,
 };

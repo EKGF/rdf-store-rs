@@ -82,11 +82,11 @@ mod tests {
 
     #[test_log::test]
     fn test_a_prefix() -> Result<(), iref::Error> {
-        let prefix = Namespace::declare(
+        let namespace = Namespace::declare(
             "test:",
             Iri::new("http://whatever.kom/test#").unwrap(),
         );
-        let x = prefix.with_local_name("abc")?;
+        let x = namespace.with_local_name("abc")?;
 
         assert_eq!(x.as_str(), "http://whatever.kom/test#abc");
         Ok(())
@@ -94,11 +94,11 @@ mod tests {
 
     #[test_log::test]
     fn test_b_prefix() -> Result<(), iref::Error> {
-        let prefix = Namespace::declare(
+        let namespace = Namespace::declare(
             "test:",
             Iri::new("http://whatever.kom/test/").unwrap(),
         );
-        let x = prefix.with_local_name("abc")?;
+        let x = namespace.with_local_name("abc")?;
 
         assert_eq!(x.as_str(), "http://whatever.kom/test/abc");
         Ok(())

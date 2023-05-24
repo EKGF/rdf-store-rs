@@ -7,7 +7,7 @@ use crate::{Literal, Namespace, RDFStoreError};
 /// consisting of a [`Namespace`] (i.e. a namespace) and a "local name".
 #[derive(Debug, Clone)]
 pub struct Class {
-    pub prefix:     Namespace,
+    pub namespace:  Namespace,
     pub local_name: String,
 }
 
@@ -16,19 +16,19 @@ impl std::fmt::Display for Class {
         write!(
             f,
             "{}{}",
-            self.prefix.name.as_str(),
+            self.namespace.name.as_str(),
             self.local_name.as_str()
         )
     }
 }
 
 impl Class {
-    pub fn declare(prefix: Namespace, local_name: &str) -> Self {
-        Self { prefix, local_name: local_name.to_string() }
+    pub fn declare(namespace: Namespace, local_name: &str) -> Self {
+        Self { namespace, local_name: local_name.to_string() }
     }
 
     pub fn as_iri(&self) -> Result<iref::IriBuf, RDFStoreError> {
-        let iri = iref::IriBuf::new(format!("{}{}", self.prefix.iri, self.local_name).as_str())?;
+        let iri = iref::IriBuf::new(format!("{}{}", self.namespace.iri, self.local_name).as_str())?;
         Ok(iri)
     }
 
@@ -37,7 +37,11 @@ impl Class {
         struct TurtleClass<'a>(&'a Class);
         impl<'a> std::fmt::Display for TurtleClass<'a> {
             fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-                write!(f, "{}{}", self.0.prefix.name, self.0.local_name)
+                write!(
+                    f,
+                    "{}{}",
+                    self.0.namespace.name, self.0.local_name
+                )
             }
         }
         TurtleClass(self)
@@ -70,33 +74,33 @@ mod tests {
 
     #[test]
     fn test_a_class_01() {
-        let prefix = Namespace::declare(
+        let namespace = Namespace::declare(
             "test:",
             iref::Iri::new("https://whatever.com/test#").unwrap(),
         );
-        let class = Class::declare(prefix, "SomeClass");
+        let class = Class::declare(namespace, "SomeClass");
         let s = format!("{:}", class);
         assert_eq!(s, "test:SomeClass")
     }
 
     #[test]
     fn test_a_class_02() {
-        let prefix = Namespace::declare(
+        let namespace = Namespace::declare(
             "test:",
             iref::Iri::new("https://whatever.com/test#").unwrap(),
         );
-        let class = Class::declare(prefix, "SomeClass");
+        let class = Class::declare(namespace, "SomeClass");
         let s = format!("{}", class.as_iri().unwrap());
         assert_eq!(s, "https://whatever.com/test#SomeClass");
     }
 
     #[test]
     fn test_is_literal() {
-        let prefix = Namespace::declare(
+        let namespace = Namespace::declare(
             "test:",
             iref::Iri::new("https://whatever.com/test#").unwrap(),
         );
-        let class = Class::declare(prefix, "SomeClass");
+        let class = Class::declare(namespace, "SomeClass");
         let literal = Literal::from_type_and_buffer(
             DataType::AnyUri,
             "https://whatever.com/test#SomeClass",
