@@ -1,13 +1,13 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 
-use crate::{Literal, Prefix, RDFStoreError};
+use crate::{Literal, Namespace, RDFStoreError};
 
 /// The `Class` struct represents an RDFS or OWL class identifier
-/// consisting of a [`Prefix`] (i.e. a namespace) and a "local name".
+/// consisting of a [`Namespace`] (i.e. a namespace) and a "local name".
 #[derive(Debug, Clone)]
 pub struct Class {
-    pub prefix:     Prefix,
+    pub prefix:     Namespace,
     pub local_name: String,
 }
 
@@ -23,7 +23,7 @@ impl std::fmt::Display for Class {
 }
 
 impl Class {
-    pub fn declare(prefix: Prefix, local_name: &str) -> Self {
+    pub fn declare(prefix: Namespace, local_name: &str) -> Self {
         Self { prefix, local_name: local_name.to_string() }
     }
 
@@ -64,13 +64,13 @@ impl Class {
 #[cfg(test)]
 mod tests {
     use {
-        super::Prefix,
+        super::Namespace,
         crate::{class::Class, DataType, Literal},
     };
 
     #[test]
     fn test_a_class_01() {
-        let prefix = Prefix::declare(
+        let prefix = Namespace::declare(
             "test:",
             iref::Iri::new("https://whatever.com/test#").unwrap(),
         );
@@ -81,7 +81,7 @@ mod tests {
 
     #[test]
     fn test_a_class_02() {
-        let prefix = Prefix::declare(
+        let prefix = Namespace::declare(
             "test:",
             iref::Iri::new("https://whatever.com/test#").unwrap(),
         );
@@ -92,7 +92,7 @@ mod tests {
 
     #[test]
     fn test_is_literal() {
-        let prefix = Prefix::declare(
+        let prefix = Namespace::declare(
             "test:",
             iref::Iri::new("https://whatever.com/test#").unwrap(),
         );

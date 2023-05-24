@@ -21,6 +21,6 @@ pub use {
     graph::Graph,
     literal::{Literal, LiteralIdUrlDisplay, LiteralUrlDisplay, LiteralValue},
     predicate::Predicate,
-    prefix::Prefix,
+    prefix::Namespace,
     term::Term,
 };

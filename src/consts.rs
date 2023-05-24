@@ -3,11 +3,11 @@
 #![doc(hidden)]
 
 use {
+    crate::{Graph, Namespace},
     core::str::FromStr,
     iref::Iri,
     lazy_static::lazy_static,
     mime::Mime,
-    crate::{Graph, Prefix},
 };
 
 #[doc(hidden)]
@@ -123,19 +123,19 @@ lazy_static! {
 
 lazy_static! {
     #[doc(hidden)]
-    pub static ref PREFIX_DCAT: Prefix = Prefix::declare(PREFIX_NAME_DCAT, *NS_DCAT.deref());
+    pub static ref PREFIX_DCAT: Namespace = Namespace::declare(PREFIX_NAME_DCAT, *NS_DCAT.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_OWL: Prefix = Prefix::declare(PREFIX_NAME_OWL, *NS_OWL.deref());
+    pub static ref PREFIX_OWL: Namespace = Namespace::declare(PREFIX_NAME_OWL, *NS_OWL.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_RDF: Prefix = Prefix::declare(PREFIX_NAME_RDF, *NS_RDF.deref());
+    pub static ref PREFIX_RDF: Namespace = Namespace::declare(PREFIX_NAME_RDF, *NS_RDF.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_RDFS: Prefix = Prefix::declare(PREFIX_NAME_RDFS, *NS_RDFS.deref());
+    pub static ref PREFIX_RDFS: Namespace = Namespace::declare(PREFIX_NAME_RDFS, *NS_RDFS.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_SKOS: Prefix = Prefix::declare(PREFIX_NAME_SKOS, *NS_SKOS.deref());
+    pub static ref PREFIX_SKOS: Namespace = Namespace::declare(PREFIX_NAME_SKOS, *NS_SKOS.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_XSD: Prefix = Prefix::declare(PREFIX_NAME_XSD, *NS_XSD.deref());
+    pub static ref PREFIX_XSD: Namespace = Namespace::declare(PREFIX_NAME_XSD, *NS_XSD.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_RDFOX: Prefix = Prefix::declare(PREFIX_NAME_RDFOX, *NS_RDFOX.deref());
+    pub static ref PREFIX_RDFOX: Namespace = Namespace::declare(PREFIX_NAME_RDFOX, *NS_RDFOX.deref());
 }
 
 lazy_static! {

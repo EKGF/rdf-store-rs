@@ -2,8 +2,8 @@
 //---------------------------------------------------------------
 use iref::{Iri, IriBuf};
 
-/// A `Prefix` represents a namespace IRI that can also be shown
-/// in abbreviated format.
+/// A `Namespace` represents a namespace IRI that can also be shown
+/// in abbreviated format, also known as "prefix".
 ///
 /// For instance, the namespace IRI <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 /// can also be shown (in [RDF Turtle](https://www.w3.org/TR/turtle/#prefixed-name)
@@ -11,14 +11,14 @@ use iref::{Iri, IriBuf};
 /// A "local name" such as "type" in such a namespace would look
 /// like <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> or like `rdf:type`.
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub struct Prefix {
+pub struct Namespace {
     /// assumed to end with ':'
     pub name: String,
     /// assumed to end with either '/' or '#'
     pub iri:  IriBuf,
 }
 
-impl std::fmt::Display for Prefix {
+impl std::fmt::Display for Namespace {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
@@ -29,7 +29,7 @@ impl std::fmt::Display for Prefix {
     }
 }
 
-impl Prefix {
+impl Namespace {
     pub fn declare<'a, Base: Into<Iri<'a>>>(name: &str, iri: Base) -> Self {
         let iri = iri.into();
         match iri.as_str().chars().last() {
@@ -78,11 +78,11 @@ impl Prefix {
 
 #[cfg(test)]
 mod tests {
-    use {super::Prefix, iref::Iri};
+    use {super::Namespace, iref::Iri};
 
     #[test_log::test]
     fn test_a_prefix() -> Result<(), iref::Error> {
-        let prefix = Prefix::declare(
+        let prefix = Namespace::declare(
             "test:",
             Iri::new("http://whatever.kom/test#").unwrap(),
         );
@@ -94,7 +94,7 @@ mod tests {
 
     #[test_log::test]
     fn test_b_prefix() -> Result<(), iref::Error> {
-        let prefix = Prefix::declare(
+        let prefix = Namespace::declare(
             "test:",
             Iri::new("http://whatever.kom/test/").unwrap(),
         );

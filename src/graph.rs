@@ -2,16 +2,16 @@
 //---------------------------------------------------------------
 
 use {
-    crate::{Literal, Prefix},
+    crate::{Literal, Namespace},
     std::ffi::CString,
 };
 
 /// Similar to [`Class`](crate::Class), the `Graph` struct represents an RDF
 /// named graph identifier, also known as a "context identifier", consisting of
-/// a [`Prefix`] (i.e. a namespace) and a "local name".
+/// a [`Namespace`] (i.e. a namespace) and a "local name".
 #[derive(Debug, Clone)]
 pub struct Graph {
-    pub namespace:  Prefix,
+    pub namespace:  Namespace,
     pub local_name: String,
 }
 
@@ -28,20 +28,20 @@ impl std::fmt::Display for Graph {
 }
 
 impl Graph {
-    pub fn declare(namespace: Prefix, local_name: &str) -> Self {
+    pub fn declare(namespace: Namespace, local_name: &str) -> Self {
         // TODO: Find a class for URI/IRIs that has separate base + local name
         // and use that as param instead
         Self { namespace, local_name: local_name.to_string() }
     }
 
-    pub fn dataset_from_path(namespace: Prefix, path: &std::path::Path) -> Self {
+    pub fn dataset_from_path(namespace: Namespace, path: &std::path::Path) -> Self {
         Self::declare(
             namespace,
             path.file_name().unwrap().to_str().unwrap(),
         )
     }
 
-    pub fn test_dataset_from_path(namespace: Prefix, path: &std::path::Path) -> Self {
+    pub fn test_dataset_from_path(namespace: Namespace, path: &std::path::Path) -> Self {
         Self::declare(
             namespace,
             format!(
@@ -92,7 +92,7 @@ mod tests {
     #[test]
     fn test_display_iri() {
         let ns = iref::Iri::new("https://whatever.kom/graph/").unwrap();
-        let graph_prefix = crate::Prefix::declare("graph:", ns);
+        let graph_prefix = crate::Namespace::declare("graph:", ns);
         let graph = crate::Graph::declare(graph_prefix, "somedataset");
 
         assert_eq!(
@@ -108,7 +108,7 @@ mod tests {
     #[test]
     fn test_graph_ns() {
         let ns = iref::Iri::new("https://whatever.kom/graph/").unwrap();
-        let graph_prefix = crate::Prefix::declare("kggraph:", ns);
+        let graph_prefix = crate::Namespace::declare("kggraph:", ns);
 
         let graph = crate::Graph::declare(graph_prefix, "somedataset");
         let c_string = graph.as_c_string().unwrap().into_string().unwrap();

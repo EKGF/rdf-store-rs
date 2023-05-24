@@ -1,10 +1,10 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 
-use crate::Prefix;
+use crate::Namespace;
 
 pub struct Predicate<'a> {
-    pub namespace:  &'a Prefix,
+    pub namespace:  &'a Namespace,
     pub local_name: String,
 }
 
@@ -30,7 +30,7 @@ impl<'a> Predicate<'a> {
         TurtlePredicate(self)
     }
 
-    pub fn declare(namespace: &'a Prefix, local_name: &str) -> Self {
+    pub fn declare(namespace: &'a Namespace, local_name: &str) -> Self {
         Self { namespace, local_name: local_name.to_string() }
     }
 
@@ -57,13 +57,13 @@ impl<'a> Predicate<'a> {
 #[cfg(test)]
 mod tests {
     use {
-        crate::{predicate::Predicate, prefix::Prefix},
+        crate::{predicate::Predicate, prefix::Namespace},
         iref::Iri,
     };
 
     #[test]
     fn test_predicate() {
-        let ns = Prefix::declare(
+        let ns = Namespace::declare(
             "abc:",
             Iri::new("https://whatever.kg/def/").unwrap(),
         );
@@ -81,7 +81,7 @@ mod tests {
     #[cfg(feature = "rdftk-support")]
     #[test]
     fn test_predicate_as_iri_ref() {
-        let ns = Prefix::declare(
+        let ns = Namespace::declare(
             "abc:",
             Iri::new("https://whatever.kg/def/").unwrap(),
         );
