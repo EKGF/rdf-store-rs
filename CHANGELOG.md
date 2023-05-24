@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.0.8](https://github.com/EKGF/rdf-store-rs/compare/0.0.7..0.0.8) - 2023-05-24
+#### Refactoring
+- **(prefix)** renamed `prefix` to `namespace` - ([3ead7f2](https://github.com/EKGF/rdf-store-rs/commit/3ead7f2d73ef834e14047bfff1f56ac18a12dbb5)) - [@jgeluk](https://github.com/jgeluk)
+
+- - -
+
 ## [0.0.7](https://github.com/EKGF/rdf-store-rs/compare/0.0.6..0.0.7) - 2023-05-24
 #### Refactoring
 - **(prefix)** renamed `Prefix` to `Namespace` - ([112f51a](https://github.com/EKGF/rdf-store-rs/commit/112f51a32550b70dc1b90ee660ee1f1f3b80cfbc)) - [@jgeluk](https://github.com/jgeluk)
