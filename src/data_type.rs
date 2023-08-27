@@ -136,7 +136,7 @@ impl DataType {
 
     pub fn from_xsd_iri(iri: &str) -> Result<Self, crate::RDFStoreError> {
         if let Some(data_type) = DATA_TYPE_MAP.get(iri) {
-            Ok(data_type.clone())
+            Ok(*data_type)
         } else {
             Err(crate::RDFStoreError::UnknownXsdDataType { data_type_iri: iri.to_string() })
         }
@@ -155,94 +155,68 @@ impl DataType {
 
     #[inline]
     pub fn is_string(&self) -> bool {
-        match self {
-            DataType::String | DataType::PlainLiteral => true,
-            _ => false,
-        }
+        matches!(self, DataType::String | DataType::PlainLiteral)
     }
 
     #[inline]
     pub fn is_iri(&self) -> bool {
-        match self {
-            DataType::AnyUri | DataType::IriReference => true,
-            _ => false,
-        }
+        matches!(self, DataType::AnyUri | DataType::IriReference)
     }
 
     #[inline]
     pub fn is_boolean(&self) -> bool {
-        match self {
-            DataType::Boolean => true,
-            _ => false,
-        }
+        matches!(self, DataType::Boolean)
     }
 
     #[inline]
     pub fn is_date(&self) -> bool {
-        match self {
-            DataType::Date => true,
-            _ => false,
-        }
+        matches!(self, DataType::Date)
     }
 
     #[inline]
     pub fn is_date_time(&self) -> bool {
-        match self {
-            DataType::DateTime => true,
-            _ => false,
-        }
+        matches!(self, DataType::DateTime)
     }
 
     #[inline]
     pub fn is_decimal(&self) -> bool {
-        match self {
-            DataType::Decimal => true,
-            _ => false,
-        }
+        matches!(self, DataType::Decimal)
     }
 
     #[inline]
     pub fn is_date_time_stamp(&self) -> bool {
-        match self {
-            DataType::DateTimeStamp => true,
-            _ => false,
-        }
+        matches!(self, DataType::DateTimeStamp)
     }
 
     #[inline]
     pub fn is_duration(&self) -> bool {
-        match self {
-            DataType::Duration => true,
-            _ => false,
-        }
+        matches!(self, DataType::Duration)
     }
 
     #[inline]
     pub fn is_signed_integer(&self) -> bool {
         // IRI_TYPES
-        match self {
+        matches!(self,
             DataType::Int |
             DataType::Integer |
             DataType::NegativeInteger |
             DataType::NonPositiveInteger |
             DataType::Long |
-            DataType::Short => true,
-            _ => false,
-        }
+            DataType::Short
+        )
     }
 
     #[inline]
     pub fn is_unsigned_integer(&self) -> bool {
         // IRI_TYPES
-        match self {
+        matches!(self,
             DataType::PositiveInteger |
             DataType::NonNegativeInteger |
             DataType::UnsignedByte |
             DataType::UnsignedInt |
             DataType::UnsignedShort |
-            DataType::UnsignedLong => true,
-            _ => false,
-        }
+            DataType::UnsignedLong
+        )
     }
 
     #[inline]
@@ -251,9 +225,6 @@ impl DataType {
     #[inline]
     pub fn is_blank_node(&self) -> bool {
         // BLANK_NODE_TYPES
-        match self {
-            DataType::BlankNode => true,
-            _ => false,
-        }
+        matches!(self, DataType::BlankNode)
     }
 }

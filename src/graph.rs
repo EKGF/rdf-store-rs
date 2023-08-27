@@ -68,7 +68,7 @@ impl Graph {
     }
 
     pub fn as_lexical_value(&self) -> Result<Literal, crate::RDFStoreError> {
-        Ok(Literal::from_iri(&self.as_iri_buf()?.as_iri())?)
+        Literal::from_iri(&self.as_iri_buf()?.as_iri())
     }
 }
 

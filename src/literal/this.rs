@@ -83,6 +83,7 @@ impl std::hash::Hash for Literal {
         let data_type = self.data_type;
         data_type.hash(state);
         unsafe {
+            #[allow(clippy::if_same_then_else)]
             if data_type.is_iri() {
                 self.literal_value.iri.hash(state)
             } else if data_type.is_string() {
@@ -115,6 +116,7 @@ impl Debug for Literal {
         let data_type = self.data_type;
         write!(f, "Literal({:?},", data_type)?;
         unsafe {
+            #[allow(clippy::if_same_then_else)]
             if data_type.is_iri() {
                 write!(f, "<{}>)", self.literal_value.iri.as_str())?
             } else if data_type.is_string() {
@@ -165,16 +167,14 @@ impl Display for Literal {
             write!(f, "{}", self.as_date().unwrap())
         } else if self.data_type.is_date_time() {
             write!(f, "{}", self.as_date_time().unwrap())
+        } else if let Some(strng) = self.as_string() {
+            write!(f, "{} ({:?})", strng.as_str(), self.data_type)
         } else {
-            if let Some(strng) = self.as_string() {
-                write!(f, "{} ({:?})", strng.as_str(), self.data_type)
-            } else {
-                write!(
-                    f,
-                    "ERROR, could not convert to String ({:?})",
-                    self.data_type
-                )
-            }
+            write!(
+                f,
+                "ERROR, could not convert to String ({:?})",
+                self.data_type
+            )
         }
     }
 }
@@ -211,13 +211,13 @@ impl Clone for Literal {
             }
         } else if self.data_type.is_date() {
             if let Some(date) = self.as_date() {
-                Literal::new_date_with_datatype(date.clone(), self.data_type).unwrap()
+                Literal::new_date_with_datatype(date, self.data_type).unwrap()
             } else {
                 todo!("the situation where the naive date in a lexical value is not a naive date")
             }
         } else if self.data_type.is_date_time() {
             if let Some(date_time) = self.as_date_time() {
-                Literal::new_date_time_with_datatype(date_time.clone(), self.data_type).unwrap()
+                Literal::new_date_time_with_datatype(*date_time, self.data_type).unwrap()
             } else {
                 todo!("the situation where the boolean in a lexical value is not a boolean")
             }
@@ -335,11 +335,7 @@ impl Literal {
             match fancy_regex::Regex::new(r#"(?:.*)[#/](.*)"#) {
                 Ok(re) => {
                     if let Ok(Some(captures)) = re.captures(iri_str) {
-                        if let Some(mat) = captures.get(1) {
-                            Some(String::from(mat.as_str()))
-                        } else {
-                            None
-                        }
+                        captures.get(1).map(|mat| String::from(mat.as_str()))
                     } else {
                         None
                     }
@@ -356,6 +352,7 @@ impl Literal {
     }
 
     pub fn as_str(&self) -> Option<&str> {
+        #[allow(clippy::if_same_then_else)]
         if self.data_type.is_iri() {
             unsafe { Some(self.literal_value.iri.as_str()) }
         } else if self.data_type.is_string() {
@@ -924,7 +921,7 @@ impl Literal {
                         write!(
                             f,
                             "\"{}\"",
-                            self.0.literal_value.string.replace("\"", "\\\"").as_str()
+                            self.0.literal_value.string.replace('\"', "\\\"").as_str()
                         )?
                     } else if data_type.is_blank_node() {
                         write!(
