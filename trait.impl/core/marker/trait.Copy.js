@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"rdf_store_rs":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html\" title=\"trait core::marker::Copy\">Copy</a> for <a class=\"enum\" href=\"rdf_store_rs/data_type/enum.DataType.html\" title=\"enum rdf_store_rs::data_type::DataType\">DataType</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"rdf_store_rs":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"enum\" href=\"rdf_store_rs/data_type/enum.DataType.html\" title=\"enum rdf_store_rs::data_type::DataType\">DataType</a>"],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html\" title=\"trait core::hash::Hash\">Hash</a> for <a class=\"struct\" href=\"rdf_store_rs/literal/this/struct.Literal.html\" title=\"struct rdf_store_rs::literal::this::Literal\">Literal</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

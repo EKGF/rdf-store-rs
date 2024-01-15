@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["rdf_store_rs"];
