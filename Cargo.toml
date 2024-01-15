@@ -51,6 +51,7 @@ git = "https://github.com/EKGF/rust-rdftk"
 version = "0.1.9"
 optional = true
 default-features = false
+features = ["uuid_iri"]
 
 [dev-dependencies]
 test-log = { version = "0.2.11", default-features = false, features = ["trace"] }
@@ -67,10 +68,11 @@ rustc-args = ["--cfg", "docsrs"]
 
 [features]
 default = ["nom"]
-rdftk-support = ["rdftk_iri/uuid_iri"]
+rdftk-support = ["no-wasm", "rdftk_iri"]
 nom-support = ["nom"]
 oxigraph = ["dep:oxrdf"]
 serde = ["dep:serde", "dep:serde_json"]
+no-wasm = []
 wasm-support = [
   "getrandom/js"
 ]

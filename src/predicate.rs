@@ -34,12 +34,12 @@ impl<'a> Predicate<'a> {
         Self { namespace, local_name: local_name.to_string() }
     }
 
-    #[cfg(feature = "rdftk-support")]
+    #[cfg(all(feature = "rdftk-support", not(target_arch = "wasm32")))]
     pub fn as_rdftk_iri_ref(&self) -> Result<rdftk_iri::IRIRef, rdftk_iri::error::Error> {
         Ok(rdftk_iri::IRIRef::new(self.as_rdftk_iri()?))
     }
 
-    #[cfg(feature = "rdftk-support")]
+    #[cfg(all(feature = "rdftk-support", not(target_arch = "wasm32")))]
     pub fn as_rdftk_iri(&self) -> Result<rdftk_iri::IRI, rdftk_iri::error::Error> {
         use std::str::FromStr;
         let path = format!(
@@ -78,7 +78,7 @@ mod tests {
         assert_eq!(str_prd.as_str(), "abc:xyz");
     }
 
-    #[cfg(feature = "rdftk-support")]
+    #[cfg(all(feature = "rdftk-support", not(target_arch = "wasm32")))]
     #[test]
     fn test_predicate_as_iri_ref() {
         let ns = Namespace::declare(

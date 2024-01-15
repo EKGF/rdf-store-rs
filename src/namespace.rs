@@ -64,12 +64,12 @@ impl Namespace {
         IriBuf::from_str(iri_str.as_str())
     }
 
-    #[cfg(feature = "rdftk-support")]
+    #[cfg(all(feature = "rdftk-support", not(target_arch = "wasm32")))]
     pub fn as_rdftk_iri_ref(&self) -> Result<rdftk_iri::IRIRef, rdftk_iri::error::Error> {
         Ok(rdftk_iri::IRIRef::new(self.as_rdftk_iri()?))
     }
 
-    #[cfg(feature = "rdftk-support")]
+    #[cfg(all(feature = "rdftk-support", not(target_arch = "wasm32")))]
     pub fn as_rdftk_iri(&self) -> Result<rdftk_iri::IRI, rdftk_iri::error::Error> {
         use std::str::FromStr;
         rdftk_iri::IRI::from_str(self.iri.as_str())
