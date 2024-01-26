@@ -29,22 +29,22 @@ env_logger = "0.10.0"
 mime = "0.3.16"
 lazy_static = "1.4.0"
 thiserror = "1.0.31"
-fancy-regex = "0.11.0"
-colored = "2.0.0"
-ignore = "0.4.18"
-iref = "2.1.3"
-indoc = "2.0.1"
-num_enum = "0.7.0"
-nom = { version="7.1.1", optional=true}
+fancy-regex = "0.13.0"
+colored = "2.1.0"
+ignore = "0.4.22"
+iref = "3.1.3"
+indoc = "2.0.4"
+num_enum = "0.7.2"
+nom = { version="7.1.3", optional=true}
 phf = { version = "0.11", features = ["macros"] }
-r2d2 = "0.8.1"
+r2d2 = "0.8.10"
 iri-string = { version = "0.7.0", features = [ "serde", "alloc" ] }
 serde = { version = "1", optional = true, features = ["derive"]}
 serde_json = { version = "1", optional = true }
-oxrdf = { version = "0.1.4", optional = true }
-chrono = { version = "0.4.23", features = ["serde"] }
-urlencoding = "2.1.2"
-getrandom = {version = "0.2.8", optional = true }
+oxrdf = { version = "0.1", optional = true }
+chrono = { version = "0.4", features = ["serde"] }
+urlencoding = "2.1"
+getrandom = {version = "0.2", optional = true }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies.rdftk_iri]
 git = "https://github.com/EKGF/rust-rdftk"
@@ -54,14 +54,14 @@ default-features = false
 features = ["uuid_iri"]
 
 [dev-dependencies]
-test-log = { version = "0.2.11", default-features = false, features = ["trace"] }
-tracing-subscriber = { version = "0.3.16", features = ["env-filter", "fmt", "ansi"] }
+test-log = { version = "0.2", default-features = false, features = ["trace"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt", "ansi"] }
 
 [build-dependencies]
-curl = "0.4.43"
+curl = "0.4"
 lazy_static = "1.4.0"
-zip = "0.6.2"
-bindgen = "0.66.1"
+zip = "0.6"
+bindgen = "0.69"
 
 [package.metadata.docs.rs]
 rustc-args = ["--cfg", "docsrs"]

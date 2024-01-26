@@ -28,7 +28,7 @@ impl Class {
     }
 
     pub fn as_iri(&self) -> Result<iref::IriBuf, RDFStoreError> {
-        let iri = iref::IriBuf::new(format!("{}{}", self.namespace.iri, self.local_name).as_str())?;
+        let iri = iref::IriBuf::try_from(format!("{}{}", self.namespace.iri.as_str(), self.local_name.as_str()))?;
         Ok(iri)
     }
 

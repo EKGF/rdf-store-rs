@@ -321,7 +321,7 @@ impl Literal {
         }
     }
 
-    pub fn as_iri(&self) -> Option<Iri> {
+    pub fn as_iri(&self) -> Option<&Iri> {
         if self.data_type.is_iri() {
             Some(unsafe { self.literal_value.iri.as_iri() })
         } else {
@@ -485,14 +485,14 @@ impl Literal {
                         id_base_iri,
                     )?))
                 } else {
-                    match IriRef::from_str(buffer) {
+                    match IriRef::new(buffer) {
                         Ok(iri) => {
                             tracing::error!(
                                 target: crate::consts::LOG_TARGET_DATABASE,
                                 "Cannot convert [{:?}] to a valid IRI",
                                 iri
                             );
-                            return Err(RDFStoreError::UnknownValueForDataType {
+                            Err(RDFStoreError::UnknownValueForDataType {
                                 data_type,
                                 value: buffer.to_string(),
                             })
@@ -502,7 +502,7 @@ impl Literal {
                                 target: crate::consts::LOG_TARGET_DATABASE,
                                 "Cannot convert [{buffer}] to an IRI"
                             );
-                            return Err(RDFStoreError::IriParseError(error))
+                            Err(RDFStoreError::IriParseError(error.to_string()))
                         },
                     }
                 }
@@ -595,13 +595,13 @@ impl Literal {
         }
         if let Ok(date_time) = chrono::NaiveDateTime::parse_from_str(buffer, "%Y-%m-%d %H:%M:%S") {
             return Ok(Some(Literal::new_date_time_with_datatype(
-                chrono::DateTime::from_utc(date_time, chrono::Utc),
+                chrono::DateTime::from_naive_utc_and_offset(date_time, chrono::Utc),
                 DataType::DateTime,
             )?))
         }
         if let Ok(date_time) = chrono::NaiveDateTime::parse_from_str(buffer, "%Y-%m-%d %H:%M") {
             return Ok(Some(Literal::new_date_time_with_datatype(
-                chrono::DateTime::from_utc(date_time, chrono::Utc),
+                chrono::DateTime::from_naive_utc_and_offset(date_time, chrono::Utc),
                 DataType::DateTime,
             )?))
         }
@@ -647,7 +647,7 @@ impl Literal {
     pub fn from_iri(iri: &Iri) -> Result<Self, RDFStoreError> {
         Ok(Literal {
             data_type:     DataType::IriReference,
-            literal_value: LiteralValue { iri: ManuallyDrop::new(IriBuf::from(iri)) },
+            literal_value: LiteralValue { iri: ManuallyDrop::new(IriBuf::from_str(iri.as_str())?) },
         })
     }
 
@@ -739,7 +739,7 @@ impl Literal {
         match IriBuf::from_str(iri_string) {
             Ok(iri) => Self::new_iri_with_datatype(&iri.as_iri(), data_type),
             Err(error) => {
-                if let Ok(iri_ref) = IriRef::from_str(iri_string) {
+                if let Ok(iri_ref) = IriRef::new(iri_string) {
                     if let Some(id_base_iri) = id_base_iri {
                         // If we passed a base IRI and the given IRI string is just an identifier,
                         // the stick the base IRI in front of it
@@ -748,7 +748,7 @@ impl Literal {
                         }
                     }
                 }
-                Err(RDFStoreError::IriParseError(error))
+                Err(RDFStoreError::IriParseError(error.to_string()))
             },
         }
     }

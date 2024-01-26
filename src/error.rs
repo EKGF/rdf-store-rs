@@ -3,6 +3,7 @@
 
 extern crate alloc;
 
+use iref::InvalidIri;
 use {crate::DataType, thiserror::Error};
 
 #[derive(Error, Debug)]
@@ -56,7 +57,9 @@ pub enum RDFStoreError {
     #[error(transparent)]
     WalkError(#[from] ignore::Error),
     #[error(transparent)]
-    IriParseError(#[from] iref::Error),
+    InvalidIri(#[from] iref::iri::InvalidIri<String>),
+    #[error("Could not parse IRI: {0:?}")]
+    IriParseError(String),
     #[error(transparent)]
     IriStringParseError(#[from] iri_string::validate::Error),
     #[error(transparent)]
@@ -85,3 +88,23 @@ impl<I: From<&'static str>> From<RDFStoreError> for nom::Err<nom::error::Error<I
         ))
     }
 }
+
+impl<T: core::fmt::Debug> From<iref::IriError<T>> for RDFStoreError {
+    fn from(error: iref::IriError<T>) -> Self {
+        RDFStoreError::IriParseError(format!("{:?}", error))
+    }
+}
+
+impl From<InvalidIri<&str>> for RDFStoreError {
+    fn from(error: InvalidIri<&str>) -> Self {
+        RDFStoreError::IriParseError(format!("{:?}", error))
+    }
+}
+
+// impl<T> From<iref::IriError<T>> for RDFStoreError {
+//     fn from(error: iref::IriError<T>) -> Self {
+//         RDFStoreError::IriParseError {
+//             msg: format!("{:?}", error)
+//         }
+//     }
+// }

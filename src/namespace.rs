@@ -1,6 +1,8 @@
+use std::str::FromStr;
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 use iref::{Iri, IriBuf};
+use crate::RDFStoreError;
 
 /// A `Namespace` represents a namespace IRI that can also be shown
 /// in abbreviated format, also known as "prefix".
@@ -30,27 +32,25 @@ impl std::fmt::Display for Namespace {
 }
 
 impl Namespace {
-    pub fn declare<'a, Base: Into<Iri<'a>>>(name: &str, iri: Base) -> Self {
-        let iri = iri.into();
+    pub fn declare(name: &str, iri: &Iri) -> Self {
         match iri.as_str().chars().last() {
-            Some('/') | Some('#') => Self { name: name.to_string(), iri: IriBuf::from(iri) },
+            Some('/') | Some('#') => Self { name: name.to_string(), iri: IriBuf::from_str(iri.as_str()).unwrap() },
             _ => {
                 Self {
                     name: name.to_string(),
-                    iri:  IriBuf::from_string(format!("{}/", iri)).unwrap(),
+                    iri:  IriBuf::new(format!("{}/", iri)).unwrap(),
                 }
             },
         }
     }
 
     pub fn declare_from_str(name: &str, iri: &str) -> Self {
-        Self::declare(name, Iri::from_str(iri).unwrap())
+        Self::declare(name, &Iri::new(iri).unwrap())
     }
 
     /// Return an identifier based on the current namespace IRI and the given
     /// local name within that namespace.
-    pub fn with_local_name(&self, name: &str) -> Result<IriBuf, iref::Error> {
-        use std::str::FromStr;
+    pub fn with_local_name(&self, name: &str) -> Result<IriBuf, RDFStoreError> {
         let iri_str = match *self.iri.as_bytes().last().unwrap() as char {
             '/' | '#' => format!("{}{name}", self.iri.as_str()),
             _ => {
@@ -61,7 +61,7 @@ impl Namespace {
             },
         };
 
-        IriBuf::from_str(iri_str.as_str())
+        Ok(IriBuf::from_str(iri_str.as_str())?)
     }
 
     #[cfg(all(feature = "rdftk-support", not(target_arch = "wasm32")))]
@@ -78,13 +78,12 @@ impl Namespace {
 
 #[cfg(test)]
 mod tests {
-    use {super::Namespace, iref::Iri};
 
     #[test_log::test]
-    fn test_a_prefix() -> Result<(), iref::Error> {
-        let namespace = Namespace::declare(
+    fn test_a_prefix() -> Result<(), crate::RDFStoreError> {
+        let namespace = crate::Namespace::declare(
             "test:",
-            Iri::new("http://whatever.kom/test#").unwrap(),
+            iref::iri::Iri::new("http://whatever.kom/test#").unwrap(),
         );
         let x = namespace.with_local_name("abc")?;
 
@@ -93,10 +92,10 @@ mod tests {
     }
 
     #[test_log::test]
-    fn test_b_prefix() -> Result<(), iref::Error> {
-        let namespace = Namespace::declare(
+    fn test_b_prefix() -> Result<(), crate::RDFStoreError> {
+        let namespace = crate::Namespace::declare(
             "test:",
-            Iri::new("http://whatever.kom/test/").unwrap(),
+            iref::iri::Iri::new("http://whatever.kom/test/").unwrap(),
         );
         let x = namespace.with_local_name("abc")?;
 

@@ -5,7 +5,7 @@
 use {
     crate::{Graph, Namespace},
     core::str::FromStr,
-    iref::Iri,
+    iref::iri::Iri,
     lazy_static::lazy_static,
     mime::Mime,
 };
@@ -106,36 +106,36 @@ const NS_STR_RDFOX: &str = "http://oxfordsemantic.tech/RDFox#";
 
 lazy_static! {
     #[doc(hidden)]
-    pub static ref NS_DCAT: Iri<'static> = Iri::new(NS_STR_DCAT).unwrap();
+    pub static ref NS_DCAT: &'static Iri = Iri::new(NS_STR_DCAT).unwrap();
     #[doc(hidden)]
-    pub static ref NS_OWL: Iri<'static> = Iri::new(NS_STR_OWL).unwrap();
+    pub static ref NS_OWL: &'static Iri = Iri::new(NS_STR_OWL).unwrap();
     #[doc(hidden)]
-    pub static ref NS_RDF: Iri<'static> = Iri::new(NS_STR_RDF).unwrap();
+    pub static ref NS_RDF: &'static Iri = Iri::new(NS_STR_RDF).unwrap();
     #[doc(hidden)]
-    pub static ref NS_RDFS: Iri<'static> = Iri::new(NS_STR_RDFS).unwrap();
+    pub static ref NS_RDFS: &'static Iri = Iri::new(NS_STR_RDFS).unwrap();
     #[doc(hidden)]
-    pub static ref NS_SKOS: Iri<'static> = Iri::new(NS_STR_SKOS).unwrap();
+    pub static ref NS_SKOS: &'static Iri = Iri::new(NS_STR_SKOS).unwrap();
     #[doc(hidden)]
-    pub static ref NS_XSD: Iri<'static> = Iri::new(NS_STR_XSD).unwrap();
+    pub static ref NS_XSD: &'static Iri = Iri::new(NS_STR_XSD).unwrap();
     #[doc(hidden)]
-    pub static ref NS_RDFOX: Iri<'static> = Iri::new(NS_STR_RDFOX).unwrap();
+    pub static ref NS_RDFOX: &'static Iri = Iri::new(NS_STR_RDFOX).unwrap();
 }
 
 lazy_static! {
     #[doc(hidden)]
-    pub static ref PREFIX_DCAT: Namespace = Namespace::declare(PREFIX_NAME_DCAT, *NS_DCAT.deref());
+    pub static ref PREFIX_DCAT: Namespace = Namespace::declare(PREFIX_NAME_DCAT, NS_DCAT.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_OWL: Namespace = Namespace::declare(PREFIX_NAME_OWL, *NS_OWL.deref());
+    pub static ref PREFIX_OWL: Namespace = Namespace::declare(PREFIX_NAME_OWL, NS_OWL.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_RDF: Namespace = Namespace::declare(PREFIX_NAME_RDF, *NS_RDF.deref());
+    pub static ref PREFIX_RDF: Namespace = Namespace::declare(PREFIX_NAME_RDF, NS_RDF.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_RDFS: Namespace = Namespace::declare(PREFIX_NAME_RDFS, *NS_RDFS.deref());
+    pub static ref PREFIX_RDFS: Namespace = Namespace::declare(PREFIX_NAME_RDFS, NS_RDFS.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_SKOS: Namespace = Namespace::declare(PREFIX_NAME_SKOS, *NS_SKOS.deref());
+    pub static ref PREFIX_SKOS: Namespace = Namespace::declare(PREFIX_NAME_SKOS, NS_SKOS.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_XSD: Namespace = Namespace::declare(PREFIX_NAME_XSD, *NS_XSD.deref());
+    pub static ref PREFIX_XSD: Namespace = Namespace::declare(PREFIX_NAME_XSD, NS_XSD.deref());
     #[doc(hidden)]
-    pub static ref PREFIX_RDFOX: Namespace = Namespace::declare(PREFIX_NAME_RDFOX, *NS_RDFOX.deref());
+    pub static ref PREFIX_RDFOX: Namespace = Namespace::declare(PREFIX_NAME_RDFOX, NS_RDFOX.deref());
 }
 
 lazy_static! {

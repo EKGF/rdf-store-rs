@@ -1,6 +1,7 @@
 // Copyright (c) 2018-2023, agnos.ai UK Ltd, all rights reserved.
 //---------------------------------------------------------------
 
+use std::str::FromStr;
 use {
     iref::{Iri, IriBuf},
     std::mem::ManuallyDrop,
@@ -26,7 +27,7 @@ impl Default for LiteralValue {
 impl LiteralValue {
     pub fn new_string(str: &str) -> Self { Self { string: ManuallyDrop::new(str.to_string()) } }
 
-    pub fn new_iri(iri: &Iri) -> Self { Self { iri: ManuallyDrop::new(IriBuf::from(iri)) } }
+    pub fn new_iri(iri: &Iri) -> Self { Self { iri: ManuallyDrop::new(IriBuf::from_str(iri.as_str()).unwrap()) } }
 
     pub fn new_boolean(boolean: bool) -> Self { Self { boolean } }
 
