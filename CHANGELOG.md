@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.0.10](https://github.com/EKGF/rdf-store-rs/compare/0.0.9..0.0.10) - 2024-01-26
+#### Miscellaneous Chores
+- minor change - ([1f93d85](https://github.com/EKGF/rdf-store-rs/commit/1f93d857cc098202fcebd34da17d01ee9e721323)) - [@jgeluk](https://github.com/jgeluk)
+#### Refactoring
+- upgraded to iref 3 - ([5c8c2cf](https://github.com/EKGF/rdf-store-rs/commit/5c8c2cfa6418ae1be578cef71862c6bca5d8a844)) - [@jgeluk](https://github.com/jgeluk)
+
+- - -
+
 ## [0.0.9](https://github.com/EKGF/rdf-store-rs/compare/0.0.8..0.0.9) - 2023-08-27
 #### Refactoring
 - **(rdf-store-rs)** fixing lint issues - ([80db984](https://github.com/EKGF/rdf-store-rs/commit/80db984945afd660ee59f06cb9c8b7e86563cf00)) - [@jgeluk](https://github.com/jgeluk)
