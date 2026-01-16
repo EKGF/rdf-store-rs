@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -30,7 +30,7 @@ jobs:
         run: cargo +nightly doc --verbose --no-deps --lib --bins --workspace --document-private-items
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.8
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
